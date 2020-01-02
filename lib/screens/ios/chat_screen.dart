@@ -1,3 +1,4 @@
+import 'package:chat/utils/log_util.dart';
 import 'package:chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,28 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   final TextEditingController _textController = new TextEditingController();
 
+  String msgK;
+
   bool _isComposing = false;
 
   @override
   Widget build(BuildContext context) {
+    // widget.channel.stream.listen((snapshot) {
+    //   if (snapshot) {
+    //     setState(() {
+    //       _messages.insert(
+    //         0,
+    //         new ChatMessage(
+    //           text: snapshot,
+    //           animationController: new AnimationController(
+    //             duration: new Duration(microseconds: 700),
+    //             vsync: this,
+    //           ),
+    //         ),
+    //       );
+    //     });
+    //   }
+    // });
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('chat'),
@@ -31,20 +50,33 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       body: new Container(
         child: new Column(
           children: <Widget>[
-            new Flexible(
-              child: new ListView.builder(
-                padding: new EdgeInsets.all(8.0),
-                reverse: true,
-                itemBuilder: (_, int index) => _messages[index],
-                itemCount: _messages.length,
-              ),
-            ),
             new StreamBuilder(
               stream: widget.channel.stream,
               builder: (context, snapshot) {
-                return new Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
-                  child: new Text(snapshot.hasData ? '${snapshot.data}' : ''),
+                // return new Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 24.0),
+                //   child: new Text(snapshot.hasData ? '${snapshot.data}' : ''),
+                // );
+                if (snapshot.hasData && msgK != snapshot.data) {
+                  Log.i("进入此处代表有消息");
+                  msgK = snapshot.data;
+                  ChatMessage message = new ChatMessage(
+                    text: snapshot.data,
+                    animationController: new AnimationController(
+                      duration: new Duration(microseconds: 700),
+                      vsync: this,
+                    ),
+                  );
+                  _messages.insert(0, message);
+                  message.animationController.forward();
+                }
+                return new Flexible(
+                  child: new ListView.builder(
+                    padding: new EdgeInsets.all(8.0),
+                    reverse: true,
+                    itemBuilder: (_, int index) => _messages[index],
+                    itemCount: _messages.length,
+                  ),
                 );
               },
             ),
@@ -68,20 +100,20 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     setState(() {
       _isComposing = false;
     });
-    ChatMessage message = new ChatMessage(
-      text: text,
-      animationController: new AnimationController(
-        duration: new Duration(microseconds: 700),
-        vsync: this,
-      ),
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
+    // ChatMessage message = new ChatMessage(
+    //   text: text,
+    //   animationController: new AnimationController(
+    //     duration: new Duration(microseconds: 700),
+    //     vsync: this,
+    //   ),
+    // );
+    // setState(() {
+    //   _messages.insert(0, message);
+    // });
 
     widget.channel.sink.add(text);
 
-    message.animationController.forward();
+    // message.animationController.forward();
   }
 
   //自定义一个发送消息的组件,属性为容器

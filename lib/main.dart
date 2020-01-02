@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -13,12 +14,13 @@ class TalkcasuallyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'chat',
-      theme: debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-          ? kIOSTheme
-          : kDefaultTheme,
-      home: new ChatScreen(
-        channel: new IOWebSocketChannel.connect('ws://localhost:1323/ws'),
-      ),
+      // theme: debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+      //     ? kIOSTheme
+      //     : kDefaultTheme,
+      home: new SignIn(),
+      // home: new ChatScreen(
+      //   channel: new IOWebSocketChannel.connect('ws://192.168.0.165:1323/ws'),
+      // ),
     );
   }
 }
