@@ -1,3 +1,4 @@
+import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/sign_up.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,24 @@ class SignInState extends State<SignIn> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              new FlatButton(
+                child: new Text("home",
+                    style: new TextStyle(
+                      color: const Color(0xff000000),
+                    )),
+                onPressed: () {
+                  Routers.push('/home', context);
+                },
+              ),
+              new FlatButton(
+                child: new Text("group",
+                    style: new TextStyle(
+                      color: const Color(0xff000000),
+                    )),
+                onPressed: () {
+                  Routers.push('/group', context);
+                },
+              ),
               new Center(
                 child: new Image.asset(
                   'images/108.png',
@@ -100,11 +119,7 @@ class SignInState extends State<SignIn> {
 
   void _openSignUp() {
     setState(() {
-      Navigator.of(context).push(new MaterialPageRoute<Null>(
-        builder: (BuildContext context) {
-          return new SignUp();
-        },
-      ));
+      Routers.push('/register', context);
     });
   }
 }

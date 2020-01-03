@@ -1,3 +1,4 @@
+import 'package:chat/routers/routers.dart';
 import 'package:chat/widgets/prompt_page.dart';
 import 'package:flutter/material.dart';
 
@@ -160,7 +161,7 @@ class SignUpState extends State<SignUp> {
                               color: const Color(0xff000000),
                             )),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Routers.pop(context);
                         },
                       ),
                     ),
