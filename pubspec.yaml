@@ -32,6 +32,12 @@ dependencies:
 
   provider: ^4.0.1
 
+  dio: ^3.0.0 # 网络请求
+
+  sprintf: ^4.0.2
+
+  # rxdart: ^0.23.1 # 此包的状态管理功能被 flutter 原生代替
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

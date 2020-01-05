@@ -1,6 +1,7 @@
-import 'package:chat/utils/log_util.dart';
-import 'package:chat/utils/token_util.dart';
 import 'package:flutter/material.dart';
+
+import 'package:chat/api/api.dart';
+import 'package:chat/models/chat_group.dart';
 
 class GroupChatList extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class _GroupChatListState extends State<GroupChatList> {
   String name = "null";
   String phone = "null";
   String email = "null";
+
+  List<ChatGroup> groups;
+  List<Text> items = new List();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,9 @@ class _GroupChatListState extends State<GroupChatList> {
       appBar: new AppBar(
         title: new Text("chat"),
       ),
-      body: new Text("聊天列表"),
+      body: new Column(
+        children: items,
+      ),
       floatingActionButton: new FloatingActionButton(
         onPressed: null,
         child: new Icon(Icons.add),
@@ -62,13 +68,17 @@ class _GroupChatListState extends State<GroupChatList> {
   @override
   void initState() {
     super.initState();
-    TokenUtil.getToken().then((result) {
-      if (result == '') {
-        Log.d("进入此处,获取 result");
-        name = result;
-      } else {
-        Log.d("进入此处,获取 result并且不为空");
-      }
+    loadData();
+  }
+
+  void loadData() async {
+    groups = await Api.getGroups();
+    groups.forEach((item) {
+      items.add(new Text(item.name == '' ? '名字为空' : item.name));
+    });
+
+    setState(() {
+      items = items;
     });
   }
 

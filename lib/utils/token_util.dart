@@ -19,7 +19,7 @@ class TokenUtil {
   static Future getEnvironment() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var res = sp.getString(serverSpKey);
-    if (res == "" || res == null) return "production";
+    if (res == "" || res == null) return "dev"; // 默认为开发环境
     return res;
   }
 
