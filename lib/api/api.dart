@@ -1,4 +1,6 @@
 import 'package:chat/models/chat_group.dart';
+import 'package:chat/models/token_info.dart';
+import 'package:chat/utils/token_util.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:chat/utils/dio_util.dart';
@@ -12,6 +14,8 @@ class Api {
   static const String BASE_URL = 'http://127.0.0.1:1323/';
   static const String STORAGE_URL = 'http://127.0.0.1:1323/';
   static const String DEV_STORAGE_URL = 'http://127.0.0.1:1323/';
+
+  static const String LOGIN = 'user/login';
 
   static const String CHAT_GROUP = 'group';
 
@@ -49,5 +53,24 @@ class Api {
     }, onError: (id, msg) {});
 
     return resultList;
+  }
+
+  static login(
+      Map<String, dynamic> params, OnSuccess onSuccess, OnFail onFail) async {
+    await DioUtil.instance.requestNetwork(Method.post, Api.LOGIN,
+        params: params, onSuccess: (response) {
+      if (response.ret == 1) {
+        TokenInfo tokenInfo = TokenInfo.fromJson(response.data);
+        TokenUtil.saveToken(tokenInfo.tokenType + ' ' + tokenInfo.accessToken);
+        TokenUtil.saveUserName(tokenInfo.username);
+        onSuccess(tokenInfo);
+        return true;
+      } else {
+        onFail(response.message);
+      }
+      return false;
+    }, onError: (int code, String msg) {
+      onFail(msg);
+    });
   }
 }

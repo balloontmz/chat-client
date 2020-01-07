@@ -1,3 +1,4 @@
+import 'package:chat/models/token_info.dart';
 import 'package:event_bus/event_bus.dart';
 
 class ApplicationEvent {
@@ -9,5 +10,10 @@ class UnAuthenticateEvent {
 }
 
 class UserSignInEvent {
-  UserSignInEvent();
+  TokenInfo token;
+  UserSignInEvent(this.token);
+}
+
+class UserSignInFailEvent {
+  UserSignInFailEvent();
 }

@@ -16,3 +16,5 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 ## note
+web 调试工具 非常好用!!!
+`vscode web dev tool `

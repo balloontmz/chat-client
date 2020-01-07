@@ -1,7 +1,9 @@
 import 'package:chat/api/ws.dart';
 import 'package:chat/events/events.dart';
+import 'package:chat/models/chat_group.dart';
 import 'package:chat/models/index.dart';
 import 'package:chat/routers/routers.dart';
+import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
@@ -82,11 +84,7 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
   }
 
   loadPage() {
-    return this._hasLogin
-        ? ChatScreen(
-            channel: IOWebSocketChannel.connect(Ws.BASE_URL),
-          )
-        : SignIn();
+    return this._hasLogin ? GroupChatList() : SignIn();
   }
 
   ///初始化时判断用户是否登录状态
