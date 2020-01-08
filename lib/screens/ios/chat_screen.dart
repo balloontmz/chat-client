@@ -1,13 +1,20 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:chat/common/global.dart';
+import 'package:chat/events/events.dart';
+import 'package:chat/models/token_info.dart';
 import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatScreen extends StatefulWidget {
-  final WebSocketChannel channel;
-
-  ChatScreen({key, this.channel}) : super(key: key);
+  final num groupID;
+  ChatScreen({key, this.groupID}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,9 +27,36 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   final TextEditingController _textController = new TextEditingController();
 
+  StreamSubscription msgSubscription;
+
   String msgK;
 
   bool _isComposing = false;
+
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWs(); // 加载 ws 相关
+  }
+
+  void _loadWs() async {
+    // String token = await TokenUtil.getToken();
+    // // token = token.substring(7);
+    // // &token=${token}
+    if (Global.channel == null || Global.channel.closeCode != null) {
+      if (ApplicationEvent.event != null) {
+        //触发事件
+        ApplicationEvent.event.fire(WSConnLosedEvent());
+      }
+    }
+    this.msgSubscription =
+        ApplicationEvent.event.on<RecMsgFromServer>().listen((event) {
+      Log.i("聊天室接收来自服务器的消息" + event.msg);
+    });
+    this.loading = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,36 +84,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       body: new Container(
         child: new Column(
           children: <Widget>[
-            new StreamBuilder(
-              stream: widget.channel.stream,
-              builder: (context, snapshot) {
-                // return new Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 24.0),
-                //   child: new Text(snapshot.hasData ? '${snapshot.data}' : ''),
-                // );
-                if (snapshot.hasData && msgK != snapshot.data) {
-                  Log.i("进入此处代表有消息");
-                  msgK = snapshot.data;
-                  ChatMessage message = new ChatMessage(
-                    text: snapshot.data,
-                    animationController: new AnimationController(
-                      duration: new Duration(microseconds: 700),
-                      vsync: this,
-                    ),
-                  );
-                  _messages.insert(0, message);
-                  message.animationController.forward();
-                }
-                return new Flexible(
-                  child: new ListView.builder(
-                    padding: new EdgeInsets.all(8.0),
-                    reverse: true,
-                    itemBuilder: (_, int index) => _messages[index],
-                    itemCount: _messages.length,
-                  ),
-                );
-              },
-            ),
+            _loadingStream(),
             new Divider(
               height: 1.0,
             ),
@@ -93,6 +98,66 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget _loadingStream() {
+    if (this.loading) {
+      return new Flexible(
+        child: new ListView.builder(
+          padding: new EdgeInsets.all(8.0),
+          reverse: true,
+          itemBuilder: (_, int index) => _messages[index],
+          itemCount: _messages.length,
+        ),
+      );
+    }
+    return new Flexible(
+      child: new ListView.builder(
+        padding: new EdgeInsets.all(8.0),
+        reverse: true,
+        itemBuilder: (_, int index) => _messages[index],
+        itemCount: _messages.length,
+      ),
+    );
+    // return new StreamBuilder(
+    //   stream: Global.channel.stream,
+    //   builder: (context, snapshot) {
+    //     // return new Padding(
+    //     //   padding: const EdgeInsets.symmetric(vertical: 24.0),
+    //     //   child: new Text(snapshot.hasData ? '${snapshot.data}' : ''),
+    //     // );
+    //     // Log.i("这里总该进入吧");
+    //     if (snapshot.hasData && msgK != snapshot.data) {
+    //       // Log.i("进入此处代表有消息");
+    //       msgK = snapshot.data;
+    //       ChatMessage message = new ChatMessage(
+    //         text: snapshot.data,
+    //         animationController: new AnimationController(
+    //           duration: new Duration(microseconds: 700),
+    //           vsync: this,
+    //         ),
+    //       );
+    //       _messages.insert(0, message);
+    //       message.animationController.forward();
+    //     } else if (snapshot.hasError) {
+    //       Log.i("连接失败,原因为:" + snapshot.toString()); //连接失败打印日志
+    //       if (ApplicationEvent.event != null) {
+    //         //触发事件
+    //         ApplicationEvent.event.fire(WSConnLosedEvent());
+    //       }
+    //     } else {
+    //       Log.i("进入此处多半是因为重复接收,消息为:" + snapshot.toString());
+    //     }
+    //     return new Flexible(
+    //       child: new ListView.builder(
+    //         padding: new EdgeInsets.all(8.0),
+    //         reverse: true,
+    //         itemBuilder: (_, int index) => _messages[index],
+    //         itemCount: _messages.length,
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   void _handleSubmitted(String text) {
@@ -111,7 +176,19 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     //   _messages.insert(0, message);
     // });
 
-    widget.channel.sink.add(text);
+    String msg = jsonEncode({
+      "action": 1,
+      "data": {
+        "group_id": widget.groupID,
+        "msg": text,
+      },
+    });
+
+    if (Global.channel == null || Global.channel.closeCode != null) {
+      ApplicationEvent.event.fire(WSConnLosedEvent());
+    } else {
+      Global.channel.sink.add(msg);
+    }
 
     // message.animationController.forward();
   }
@@ -155,7 +232,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void dispose() {
     for (ChatMessage message in _messages)
       message.animationController.dispose();
-    widget.channel.sink.close(); // 关闭长连接
+    this.msgSubscription.cancel(); // 离开页面时取消订阅
+    // Global.channel.sink.close(); // 此处不关闭长连接 -- 长连接应该考虑在关闭 app 之时
     super.dispose();
   }
 }

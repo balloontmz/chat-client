@@ -18,3 +18,12 @@ samples, guidance on mobile development, and a full API reference.
 ## note
 web 调试工具 非常好用!!!
 `vscode web dev tool `
+
+ws token  可以通过 query 或者 header 传递,之前由于没找到 headers 的传递方法而采用的 query
+
+## 1578495803
+1. 存在一个 ws 连接的 bug,当服务器无法响应时产生. 
+
+2. 采用 event bus 的订阅流收集和分发服务端的消息,注意销毁页面时销毁监听者.订阅流代表可以注册全局的事件监听而不用担心时间被占用. 
+
+3. ws 消息处理是否应该考虑单独放在一个类里面进行调用???消息渲染暂时被注释,后面重新加

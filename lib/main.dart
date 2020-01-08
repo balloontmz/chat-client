@@ -1,9 +1,11 @@
 import 'package:chat/api/ws.dart';
+import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
 import 'package:chat/models/chat_group.dart';
 import 'package:chat/models/index.dart';
 import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
+import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +15,7 @@ import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,6 +106,45 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
         this._hasLogin = true;
       });
     });
+
+    ApplicationEvent.event.on<WSConnLosedEvent>().listen((event) {
+      if (this._hasLogin = true) {
+        //如果已登录,则创建一个连接
+        //如果连接为空或者关闭码不为空,则创建一个连接
+        //TODO: 如果服务端无响应,则 channel 是一个错误的对象但是 closeCode 为 null,网上有一定的解决办法,但是不根治
+        if (Global.channel == null || Global.channel.closeCode != null) {
+          Log.i("进入此处创建长连接");
+          _createChannel();
+        } else {
+          //如果存在连接,则直接重建
+          Log.i("进入此处是存在错误的,因为引发了 ws 关闭事件,conn 却是正常的");
+          setState(() {});
+        }
+      }
+    });
+  }
+
+  ///创建长连接并监听 -- 在初始化时和断开连接时
+  void _createChannel() async {
+    String token = await TokenUtil.getToken();
+
+    Global.channel = new IOWebSocketChannel.connect(
+      Ws.BASE_URL,
+      headers: {"Authorization": token},
+      pingInterval: Duration(seconds: 5),
+    );
+
+    //WebSocketChannelException 对于服务端不正常连接的情况没有正确处理
+    //[github 的 issue 没有关闭](https://github.com/dart-lang/web_socket_channel/issues/38)
+
+    Global.channel.stream.listen((message) {
+      Log.i("接收到来自服务器的消息" + message);
+      ApplicationEvent.event.fire(RecMsgFromServer(message)); // 分发信息
+    }, onError: (error) {
+      Log.i("出现错误,为:" + error);
+    });
+
+    setState(() {});
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/sign_up.dart';
+import 'package:chat/utils/log_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -11,10 +12,9 @@ class Routers {
   static Map<String, Function> routes = {
     '/login': (context) => SignIn(),
     '/register': (context) => SignUp(),
-    '/home': (context) => ChatScreen(
-          channel: new IOWebSocketChannel.connect(
-              'ws://localhost:1323/ws'), //192.168.0.165
-        ),
+    '/home': (context, {arguments}) {
+      return new ChatScreen(groupID: arguments['group_id']);
+    },
     '/group': (context) => GroupChatList(),
   };
 
@@ -22,11 +22,12 @@ class Routers {
 
   static run(RouteSettings settings) {
     final Function pageContentBuilder = Routers.routes[settings.name];
-
+    Log.i("进入此处");
     if (pageContentBuilder != null) {
       currentRouteName = settings.name;
       if (settings.arguments != null) {
         // 传参路由
+        Log.i("存在参数,进入此处");
         return new MaterialPageRoute(
             builder: (context) =>
                 pageContentBuilder(context, arguments: settings.arguments));
@@ -59,6 +60,7 @@ class Routers {
   /// 方法跳转
   static push(String routeName, BuildContext context, [Map parmas]) {
     if (parmas != null) {
+      Log.i("路由存在参数进入此处");
       return Navigator.pushNamed(context, routeName, arguments: parmas);
     } else {
       return Navigator.pushNamed(

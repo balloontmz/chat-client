@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:chat/common/global.dart';
+import 'package:chat/events/events.dart';
 import 'package:chat/routers/routers.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
@@ -16,6 +20,7 @@ class _GroupChatListState extends State<GroupChatList> {
   String phone = "null";
   String email = "null";
 
+  StreamSubscription msgSubscription;
   List<ChatGroup> groups;
   List<ChatGroup> items = new List();
 
@@ -74,7 +79,11 @@ class _GroupChatListState extends State<GroupChatList> {
                 new ListTile(
                   onTap: () {
                     Log.i("点击了 tile,准备进入聊天详情");
-                    Routers.push("/home", context);
+                    Routers.push(
+                      "/home",
+                      context,
+                      {"group_id": items[index].id},
+                    );
                   }, //
                   leading: new Image.asset(
                     "images/avatar1.jpg",
@@ -112,6 +121,12 @@ class _GroupChatListState extends State<GroupChatList> {
       Log.i("进入此处代表处理了结果");
       items.add(item);
     });
+    if (Global.channel == null || Global.channel.closeCode != null) {
+      if (ApplicationEvent.event != null) {
+        //触发事件
+        ApplicationEvent.event.fire(WSConnLosedEvent());
+      }
+    }
 
     if (this.mounted) {
       // 只有组件没被销毁的情况下才更新状态
@@ -119,6 +134,10 @@ class _GroupChatListState extends State<GroupChatList> {
         items = items;
       });
     }
+    this.msgSubscription =
+        ApplicationEvent.event.on<RecMsgFromServer>().listen((event) {
+      Log.i("列表接收来自服务器的消息" + event.msg);
+    });
   }
 
   Future<void> _onFresh() async {
@@ -156,5 +175,12 @@ class _GroupChatListState extends State<GroupChatList> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Log.i("离开时销毁对象");
+    this.msgSubscription.cancel(); // 离开页面时取消
+    super.dispose();
   }
 }
