@@ -12,8 +12,9 @@ const jpushKey = "jpushId";
 
 class TokenUtil {
   static void clear() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.clear();
+    //此函数会清除所有本地存储,慎用!!!
+    // SharedPreferences sp = await SharedPreferences.getInstance();
+    // sp.clear();
   }
 
   static Future getEnvironment() async {

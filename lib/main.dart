@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:chat/api/ws.dart';
 import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
 import 'package:chat/models/chat_group.dart';
+import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/index.dart';
 import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
@@ -138,8 +141,15 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
     //[github 的 issue 没有关闭](https://github.com/dart-lang/web_socket_channel/issues/38)
 
     Global.channel.stream.listen((message) {
-      Log.i("接收到来自服务器的消息" + message);
-      ApplicationEvent.event.fire(RecMsgFromServer(message)); // 分发信息
+      try {
+        Log.i("接收到来自服务器的消息" + message);
+        var msgJson = jsonDecode(message as String);
+        Log.i("进入此处代表序列化完成");
+        ApplicationEvent.event
+            .fire(RecMsgFromServer(ChatMsg.fromJson(msgJson))); // 分发信息
+      } catch (e) {
+        Log.i("监听消息过程出现错误,错误原因为:" + e.toString());
+      }
     }, onError: (error) {
       Log.i("出现错误,为:" + error);
     });

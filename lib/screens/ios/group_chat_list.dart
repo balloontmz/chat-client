@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
 import 'package:chat/routers/routers.dart';
+import 'package:chat/utils/group_util.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +116,23 @@ class _GroupChatListState extends State<GroupChatList> {
     loadData();
   }
 
-  void loadData() async {
+  void loadData({bool fresh}) async {
+    //TODO: 此处应该拉接口跟远程数据进行比对,如相等不重新拉取数据
+    //不需要刷新数据时,先尝试从缓存中拉取
+    if (!fresh) {
+      var data = await GroupUtil.getGroupList();
+      if (data != null && this.mounted) {
+        Log.i("进入此处代表采用缓存的聊天室列表");
+        this.items = data;
+        return;
+      } else {
+        Log.i("进入页面,缓存数据可能为空,打个日志");
+        Log.i("$data");
+      }
+    }
+
+    items = new List(); // 首先置空
+
     groups = await Api.getGroups();
     groups.forEach((item) {
       Log.i("进入此处代表处理了结果");
@@ -130,18 +147,19 @@ class _GroupChatListState extends State<GroupChatList> {
 
     if (this.mounted) {
       // 只有组件没被销毁的情况下才更新状态
+      await GroupUtil.setGroupList(items); // 将拉取到的数据进行缓存.
       setState(() {
         items = items;
       });
     }
     this.msgSubscription =
         ApplicationEvent.event.on<RecMsgFromServer>().listen((event) {
-      Log.i("列表接收来自服务器的消息" + event.msg);
+      Log.i("列表接收来自服务器的消息" + event.msg.msg);
     });
   }
 
   Future<void> _onFresh() async {
-    loadData();
+    loadData(fresh: true);
   }
 
   Widget _drawerOption(Icon icon, String name) {

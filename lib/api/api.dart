@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:chat/models/chat_group.dart';
 import 'package:chat/models/token_info.dart';
+import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -45,9 +48,14 @@ class Api {
         try {
           ChatGroup cellData = new ChatGroup.fromJson(response.data[i]);
 
+          // Log.i("尝试序列化 group");
+          // Log.i(jsonEncode(cellData.toJson()));
+
           resultList.add(cellData);
         } catch (e) {
           // No specified type, handles all
+          Log.i("拉取 group list 进入此处发生错误");
+          Log.i(e.toString());
         }
       }
     }, onError: (id, msg) {});

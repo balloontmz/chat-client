@@ -53,7 +53,21 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
     this.msgSubscription =
         ApplicationEvent.event.on<RecMsgFromServer>().listen((event) {
-      Log.i("聊天室接收来自服务器的消息" + event.msg);
+      Log.i("聊天室接收来自服务器的消息" + event.msg.msg);
+
+      setState(() {
+        if (event.msg.groupID == widget.groupID) {
+          ChatMessage message = new ChatMessage(
+            text: event.msg.msg,
+            animationController: new AnimationController(
+              duration: new Duration(microseconds: 700),
+              vsync: this,
+            ),
+          );
+          _messages.insert(0, message);
+          message.animationController.forward();
+        }
+      });
     });
     this.loading = false;
   }

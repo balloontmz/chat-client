@@ -1,3 +1,4 @@
+import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/token_info.dart';
 import 'package:event_bus/event_bus.dart';
 
@@ -25,6 +26,6 @@ class WSConnLosedEvent {
 }
 
 class RecMsgFromServer {
-  String msg;
+  ChatMsg msg;
   RecMsgFromServer(this.msg);
 }

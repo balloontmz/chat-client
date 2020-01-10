@@ -2,22 +2,26 @@ import 'dart:convert';
 
 import 'package:chat/utils/log_util.dart';
 
-class ChatGroup {
-  String name;
+class ChatMsg {
+  String msg;
   int id;
+  int userID;
+  int groupID;
 
-  ChatGroup({
+  ChatMsg({
     this.id,
-    this.name,
+    this.msg,
+    this.userID,
+    this.groupID,
   });
 
   ///反序列化
-  factory ChatGroup.fromJson(Map<String, dynamic> json) {
-    Log.i("此处打印 group 中不存在的值");
-    Log.i(json['abc']);
-    return ChatGroup(
+  factory ChatMsg.fromJson(Map<String, dynamic> json) {
+    return ChatMsg(
       id: json['id'],
-      name: json['name'],
+      userID: json['user_id'],
+      groupID: json['group_id'],
+      msg: json['msg'],
     );
   }
 
@@ -31,6 +35,5 @@ class ChatGroup {
   ///序列化
   Map<String, dynamic> toJson() => {
         'id': this.id,
-        'name': this.name,
       };
 }
