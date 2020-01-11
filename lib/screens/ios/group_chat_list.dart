@@ -6,6 +6,7 @@ import 'package:chat/routers/routers.dart';
 import 'package:chat/utils/group_util.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
+import 'package:chat/widgets/fancy_tab_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/api/api.dart';
@@ -67,6 +68,7 @@ class _GroupChatListState extends State<GroupChatList> {
       appBar: new AppBar(
         title: new Text("chat"),
       ),
+      bottomNavigationBar: FancyTabBar(), // 此导航栏
       body: new RefreshIndicator(
         onRefresh: _onFresh,
         child: new ListView.builder(
@@ -102,10 +104,10 @@ class _GroupChatListState extends State<GroupChatList> {
           },
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: null,
-        child: new Icon(Icons.add),
-      ),
+      // floatingActionButton: new FloatingActionButton(
+      //   onPressed: null,
+      //   child: new Icon(Icons.add),
+      // ),
       drawer: drawer,
     );
   }
