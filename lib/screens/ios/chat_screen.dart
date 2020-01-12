@@ -52,18 +52,36 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       }
     }
     this.msgSubscription =
-        ApplicationEvent.event.on<RecMsgFromServer>().listen((event) {
+        ApplicationEvent.event.on<RecMsgFromServer>().listen((event) async {
       Log.i("聊天室接收来自服务器的消息" + event.msg.msg);
+
+      int userID = await TokenUtil.getUserId();
+
+      Log.i("获取到的用户 id 为: $userID");
 
       setState(() {
         if (event.msg.groupID == widget.groupID) {
-          ChatMessage message = new ChatMessage(
-            text: event.msg.msg,
-            animationController: new AnimationController(
-              duration: new Duration(microseconds: 700),
-              vsync: this,
-            ),
-          );
+          ChatMessage message;
+          Log.i("当前消息用户 id 为: ${event.msg.userID}, 当前使用者 id 为: ${userID}");
+          if (event.msg.userID == userID) {
+            message = new ChatMessage(
+              text: event.msg.msg,
+              animationController: new AnimationController(
+                duration: new Duration(microseconds: 700),
+                vsync: this,
+              ),
+              left: false,
+            );
+          } else {
+            message = new ChatMessage(
+              text: event.msg.msg,
+              animationController: new AnimationController(
+                duration: new Duration(microseconds: 700),
+                vsync: this,
+              ),
+            );
+          }
+
           _messages.insert(0, message);
           message.animationController.forward();
         }
@@ -248,7 +266,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     for (ChatMessage message in _messages)
       message.animationController.dispose();
     this.msgSubscription.cancel(); // 离开页面时取消订阅
-    // Global.channel.sink.close(); // 此处不关闭长连接 -- 长连接应该考虑在关闭 app 之时
+    // Global.channel.sink.close(); // 此处不关闭长连接 -- 长连接应该考��在关闭 app 之时
     super.dispose();
   }
 }

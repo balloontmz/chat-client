@@ -4,13 +4,15 @@ class TokenInfo {
   String tokenType;
   int expiresIn;
   String username;
+  int userid;
   int companyId;
 
   TokenInfo(
       {this.accessToken,
       this.tokenType,
-      this.expiresIn,
       this.username,
+      this.userid,
+      this.expiresIn,
       this.companyId = 0});
 
   factory TokenInfo.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class TokenInfo {
       accessToken: tokenObj['access_token'],
       tokenType: tokenObj['token_type'],
       username: tokenObj['username'],
+      userid: tokenObj['userid'],
     );
   }
 }

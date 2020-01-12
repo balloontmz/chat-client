@@ -13,10 +13,10 @@ typedef OnSuccess<T>(T data);
 typedef OnFail(String message);
 
 class Api {
-  static const String DEV_BASE_URL = 'http://127.0.0.1:1323/';
-  static const String BASE_URL = 'http://127.0.0.1:1323/';
-  static const String STORAGE_URL = 'http://127.0.0.1:1323/';
-  static const String DEV_STORAGE_URL = 'http://127.0.0.1:1323/';
+  static const String DEV_BASE_URL = 'http://localhost:1323/';
+  static const String BASE_URL = 'http://localhost:1323/';
+  static const String STORAGE_URL = 'http://localhost:1323/';
+  static const String DEV_STORAGE_URL = 'http://localhost:1323/';
 
   static const String LOGIN = 'user/login';
 
@@ -71,6 +71,7 @@ class Api {
         TokenInfo tokenInfo = TokenInfo.fromJson(response.data);
         TokenUtil.saveToken(tokenInfo.tokenType + ' ' + tokenInfo.accessToken);
         TokenUtil.saveUserName(tokenInfo.username);
+        TokenUtil.saveUserId(tokenInfo.userid);
         onSuccess(tokenInfo);
         return true;
       } else {
