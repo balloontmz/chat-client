@@ -8,9 +8,11 @@ import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/index.dart';
 import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
+import 'package:chat/screens/ios/home.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:crypto/crypto.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +93,7 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
   }
 
   loadPage() {
-    return this._hasLogin ? GroupChatList() : SignIn();
+    return this._hasLogin ? HomePage() : SignIn();
   }
 
   ///初始化时判断用户是否登录状态

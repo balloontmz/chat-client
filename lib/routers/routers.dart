@@ -1,5 +1,6 @@
 import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
+import 'package:chat/screens/ios/home.dart';
 import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/sign_up.dart';
 import 'package:chat/screens/ios/user_center.dart';
@@ -16,7 +17,7 @@ class Routers {
     '/home': (context, {arguments}) {
       return new ChatScreen(groupID: arguments['group_id']);
     },
-    '/group': (context) => GroupChatList(),
+    '/group': (context) => HomePage(),
     '/user-center': (context) => UserCenter(),
   };
 

@@ -36,6 +36,8 @@ dependencies:
 
   sprintf: ^4.0.2
 
+  crypto: ^2.1.4
+
   # rxdart: ^0.23.1 # 此包的状态管理功能被 flutter 原生代替
 
 dev_dependencies:

@@ -5,6 +5,10 @@ import 'tab_item.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
 class FancyTabBar extends StatefulWidget {
+  Function clickButton;
+
+  FancyTabBar(this.clickButton);
+
   @override
   _FancyTabBarState createState() => _FancyTabBarState();
 }
@@ -23,7 +27,7 @@ class _FancyTabBarState extends State<FancyTabBar>
   IconData nextIcon = Icons.search;
   IconData activeIcon = Icons.search;
 
-  int currentSelected = 1;
+  int currentSelected = 2;
 
   @override
   void initState() {
@@ -84,39 +88,42 @@ class _FancyTabBarState extends State<FancyTabBar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TabItem(
-                  selected: currentSelected == 0,
+                  selected: currentSelected == 1,
                   iconData: Icons.home,
                   title: "HOME",
                   callbackFunction: () {
                     Log.i("点击主页");
                     setState(() {
                       nextIcon = Icons.home;
-                      currentSelected = 0;
-                      Routers.push("/group", context);
+                      currentSelected = 1;
+                      // Routers.push("/group", context);
+                      widget.clickButton(this.currentSelected);
                     });
                     _initAnimationAndStart(_positionAnimation.value, -1);
                   }),
               TabItem(
-                  selected: currentSelected == 1,
+                  selected: currentSelected == 2,
                   iconData: Icons.search,
                   title: "SEARCH",
                   callbackFunction: () {
                     Log.i("进入个人中心");
                     setState(() {
                       nextIcon = Icons.search;
-                      currentSelected = 1;
-                      Routers.push("/user-center", context);
+                      currentSelected = 2;
+                      // Routers.push("/user-center", context);
+                      widget.clickButton(this.currentSelected);
                     });
                     _initAnimationAndStart(_positionAnimation.value, 0);
                   }),
               TabItem(
-                  selected: currentSelected == 2,
+                  selected: currentSelected == 3,
                   iconData: Icons.person,
                   title: "USER",
                   callbackFunction: () {
                     setState(() {
                       nextIcon = Icons.person;
-                      currentSelected = 2;
+                      currentSelected = 3;
+                      // widget.clickButton(this.currentSelected);
                     });
                     _initAnimationAndStart(_positionAnimation.value, 1);
                   })

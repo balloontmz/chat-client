@@ -10,12 +10,6 @@ class UserCenter extends StatefulWidget {
 class _UserCenter extends State<UserCenter> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("个人中心"),
-      ),
-      bottomNavigationBar: FancyTabBar(), // 此导航栏
-      body: new Text("这是个人中心"),
-    );
+    return new Text("这是个人中心");
   }
 }
