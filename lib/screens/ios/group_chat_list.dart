@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat/common/chat_msg.dart';
 import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
 import 'package:chat/routers/routers.dart';
@@ -83,10 +84,16 @@ class _GroupChatListState extends State<GroupChatList> {
       items = new List(); // 首先置空
 
       groups = await Api.getGroups();
+
+      List<int> groupIDs = List();
       groups.forEach((item) {
-        Log.i("进入此处代表处理了结果");
+        Log.i("进入此处代表处理了结果,聊天室 name 为:${item.name}");
+        groupIDs.add(item.id);
         items.add(item);
       });
+
+      ChatMsgUpgrage.upgradeGroupMsgs(groupIDs); // 更新聊天室对应的消息
+
       if (Global.channel == null || Global.channel.closeCode != null) {
         if (ApplicationEvent.event != null) {
           //触发事件

@@ -148,8 +148,11 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
         Log.i("接收到来自服务器的消息" + message);
         var msgJson = jsonDecode(message as String);
         Log.i("进入此处代表序列化完成");
-        ApplicationEvent.event
-            .fire(RecMsgFromServer(ChatMsg.fromJson(msgJson))); // 分发信息
+
+        ChatMsg msg = ChatMsg.fromJson(msgJson);
+        ChatMsg.insert(msg); // 插入本地数据库
+
+        ApplicationEvent.event.fire(RecMsgFromServer(msg)); // 分发信息
       } catch (e) {
         Log.i("监听消息过程出现错误,错误原因为:" + e.toString());
       }

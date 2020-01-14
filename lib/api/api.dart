@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat/models/chat_group.dart';
+import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/token_info.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
@@ -21,6 +22,7 @@ class Api {
   static const String LOGIN = 'user/login';
 
   static const String CHAT_GROUP = 'group';
+  static const String CHAT_MSG = 'msg';
 
   static const String REFRESH_TOKEN = '';
   static const bool isTest = true;
@@ -39,7 +41,7 @@ class Api {
   }
 
   // 聊天列表
-  static Future getGroups() async {
+  static Future<List<ChatGroup>> getGroups() async {
     List<ChatGroup> resultList = new List();
 
     await DioUtil.instance.requestNetwork(Method.get, Api.CHAT_GROUP,
@@ -59,6 +61,38 @@ class Api {
         }
       }
     }, onError: (id, msg) {});
+
+    return resultList;
+  }
+
+  // 聊天消息列表
+  static Future<List<ChatMsg>> getMsgs(args) async {
+    List<ChatMsg> resultList = new List();
+
+    Log.i("拉取聊天消息列表传入的参数为: $args");
+
+    await DioUtil.instance.requestNetwork(
+      Method.get,
+      Api.CHAT_MSG,
+      onSuccess: (response) {
+        for (int i = 0; i < response.data.length; i++) {
+          try {
+            ChatMsg cellData = new ChatMsg.fromJson(response.data[i]);
+
+            // Log.i("尝试序列化 group");
+            // Log.i(jsonEncode(cellData.toJson()));
+
+            resultList.add(cellData);
+          } catch (e) {
+            // No specified type, handles all
+            Log.i("拉取 group list 进入此处发生错误");
+            Log.i(e.toString());
+          }
+        }
+      },
+      onError: (id, msg) {},
+      queryParameters: args,
+    );
 
     return resultList;
   }

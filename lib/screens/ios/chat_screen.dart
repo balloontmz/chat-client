@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
+import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/token_info.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
@@ -51,43 +52,60 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ApplicationEvent.event.fire(WSConnLosedEvent());
       }
     }
+
+    int userID = await TokenUtil.getUserId();
+    //进入时首先从本地数据库拉取数据
+    List<ChatMsg> msgs = await ChatMsg.getMsgList();
+    Log.i("从数据库拉取到的消息列表为: $msgs");
+    if (msgs != null) {
+      msgs.forEach((item) {
+        Log.i("进入每次迭代");
+        setState(() {
+          _appendMessages(item, userID);
+        });
+      });
+    }
+
     this.msgSubscription =
         ApplicationEvent.event.on<RecMsgFromServer>().listen((event) async {
       Log.i("聊天室接收来自服务器的消息" + event.msg.msg);
 
-      int userID = await TokenUtil.getUserId();
-
       Log.i("获取到的用户 id 为: $userID");
 
       setState(() {
-        if (event.msg.groupID == widget.groupID) {
-          ChatMessage message;
-          Log.i("当前消息用户 id 为: ${event.msg.userID}, 当前使用者 id 为: ${userID}");
-          if (event.msg.userID == userID) {
-            message = new ChatMessage(
-              text: event.msg.msg,
-              animationController: new AnimationController(
-                duration: new Duration(microseconds: 700),
-                vsync: this,
-              ),
-              left: false,
-            );
-          } else {
-            message = new ChatMessage(
-              text: event.msg.msg,
-              animationController: new AnimationController(
-                duration: new Duration(microseconds: 700),
-                vsync: this,
-              ),
-            );
-          }
-
-          _messages.insert(0, message);
-          message.animationController.forward();
-        }
+        _appendMessages(event.msg, userID);
       });
     });
     this.loading = false;
+  }
+
+  void _appendMessages(ChatMsg msg, int userID) {
+    Log.i("当前消息聊天组 id 为: ${msg.groupID}, 当前使用者 id 为: ${widget.groupID}");
+    if (msg.groupID == widget.groupID) {
+      ChatMessage message;
+      Log.i("当前消息用户 id 为: ${msg.userID}, 当前使用者 id 为: ${userID}");
+      if (msg.userID == userID) {
+        message = new ChatMessage(
+          text: msg.msg,
+          animationController: new AnimationController(
+            duration: new Duration(microseconds: 700),
+            vsync: this,
+          ),
+          left: false,
+        );
+      } else {
+        message = new ChatMessage(
+          text: msg.msg,
+          animationController: new AnimationController(
+            duration: new Duration(microseconds: 700),
+            vsync: this,
+          ),
+        );
+      }
+
+      _messages.insert(0, message);
+      message.animationController.forward();
+    }
   }
 
   @override
