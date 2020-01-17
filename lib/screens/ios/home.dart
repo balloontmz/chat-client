@@ -57,6 +57,7 @@ class _HomePage extends State<HomePage> {
     }
 
     return new Scaffold(
+      // backgroundColor: Colors.transparent,
       appBar: appBar,
       drawer: drawer,
       bottomNavigationBar: FancyTabBar(_switchBottom), // 此导航栏

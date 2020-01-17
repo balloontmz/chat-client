@@ -79,7 +79,7 @@ class _FancyTabBarState extends State<FancyTabBar>
         Container(
           height: 65,
           margin: EdgeInsets.only(top: 45),
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          decoration: BoxDecoration(color: Colors.grey, boxShadow: [
             BoxShadow(
                 color: Colors.black12, offset: Offset(0, -1), blurRadius: 8)
           ]),
@@ -132,7 +132,9 @@ class _FancyTabBarState extends State<FancyTabBar>
         ),
         IgnorePointer(
           child: Container(
-            decoration: BoxDecoration(color: Colors.transparent),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
             child: Align(
               heightFactor: 1,
               alignment: Alignment(_positionAnimation.value, 0),
@@ -152,7 +154,7 @@ class _FancyTabBarState extends State<FancyTabBar>
                                   width: 70,
                                   height: 70,
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Colors.blue,
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
@@ -176,7 +178,7 @@ class _FancyTabBarState extends State<FancyTabBar>
                             shape: BoxShape.circle,
                             color: PURPLE,
                             border: Border.all(
-                                color: Colors.white,
+                                color: Colors.red,
                                 width: 5,
                                 style: BorderStyle.none)),
                         child: Padding(
@@ -185,7 +187,7 @@ class _FancyTabBarState extends State<FancyTabBar>
                             opacity: fabIconAlpha,
                             child: Icon(
                               activeIcon,
-                              color: Colors.white,
+                              color: Colors.yellow,
                             ),
                           ),
                         ),
@@ -242,7 +244,7 @@ class HalfPainter extends CustomPainter {
     path.arcTo(afterRect, vector.radians(180), vector.radians(-90), false);
     path.close();
 
-    canvas.drawPath(path, Paint()..color = Colors.white);
+    canvas.drawPath(path, Paint()..color = Colors.green);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:chat/widgets/grid_page.dart';
 import 'package:chat/widgets/search_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class UserCenter extends StatefulWidget {
 class _UserCenter extends State<UserCenter> {
   @override
   Widget build(BuildContext context) {
+    return new GridPage();
     return new ListView(
       children: <Widget>[
         new SearchBox(),

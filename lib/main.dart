@@ -12,6 +12,7 @@ import 'package:chat/screens/ios/home.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:chat/widgets/grid_page.dart';
 import 'package:crypto/crypto.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
@@ -24,6 +25,8 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() async {
+  // runApp(new GridPage());
+
   WidgetsFlutterBinding.ensureInitialized();
   var token = await TokenUtil.getToken();
   var userName = await TokenUtil.getAccountName();
@@ -82,6 +85,7 @@ class _TalkcasuallyApp extends State<TalkcasuallyApp> {
               },
               debugShowCheckedModeBanner: false,
               home: Scaffold(
+                // backgroundColor: Colors.transparent,
                 resizeToAvoidBottomPadding: false,
                 body: loadPage(),
               ),
