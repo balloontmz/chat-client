@@ -8,6 +8,8 @@ import 'package:chat/utils/group_util.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:chat/widgets/search_box.dart';
+import 'package:chat/widgets/sliver_header.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/api/api.dart';
@@ -31,37 +33,31 @@ class _GroupChatListState extends State<GroupChatList> {
   Widget build(BuildContext context) {
     return new RefreshIndicator(
       onRefresh: _onFresh,
-      child: new ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return new Column(
-            children: <Widget>[
-              new Divider(
-                height: 1.0,
-              ),
-              new ListTile(
-                onTap: () {
-                  Log.i("点击了 tile,准备进入聊天详情");
-                  Routers.push(
-                    "/home",
-                    context,
-                    {"group_id": items[index].id},
-                  );
-                }, //
-                leading: new Image.asset(
-                  "images/avatar1.jpg",
-                  width: 40.0,
-                  height: 40.0,
-                  fit: BoxFit.cover,
-                ),
-                title: new Text(
-                    items[index].name == '' ? '没有名字' : items[index].name),
-                subtitle: new Text("你高考考了满分你知道吗？"),
-                trailing: new Text("9:00"),
-              ),
-            ],
-          );
-        },
+      child: new CustomScrollView(
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            pinned: false,
+            floating: false,
+            delegate: HeaderSliverAppBarDelegate(
+              minHeight: 50.0,
+              maxHeight: 60.0,
+              child: new SearchBox(),
+            ),
+          ),
+
+          // new Expanded(
+          //   child: new ListView.builder(
+          //     itemCount: items.length,
+          //     itemBuilder: _listItemBuilder(context),
+          //   ),
+          // ),
+          new SliverList(
+            delegate: new SliverChildBuilderDelegate(
+              _listItemBuilder(context),
+              childCount: items.length,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -70,6 +66,38 @@ class _GroupChatListState extends State<GroupChatList> {
   void initState() {
     super.initState();
     loadData(fresh: false);
+  }
+
+  Widget Function(BuildContext, int) _listItemBuilder(context) {
+    return (context, index) {
+      return new Column(
+        children: <Widget>[
+          new Divider(
+            height: 1.0,
+          ),
+          new ListTile(
+            onTap: () {
+              Log.i("点击了 tile,准备进入聊天详情");
+              Routers.push(
+                "/home",
+                context,
+                {"group_id": items[index].id},
+              );
+            }, //
+            leading: new Image.asset(
+              "images/avatar1.jpg",
+              width: 40.0,
+              height: 40.0,
+              fit: BoxFit.cover,
+            ),
+            title:
+                new Text(items[index].name == '' ? '没有名字' : items[index].name),
+            subtitle: new Text("你高考考了满分你知道吗？"),
+            trailing: new Text("9:00"),
+          ),
+        ],
+      );
+    };
   }
 
   void loadData({bool fresh}) async {

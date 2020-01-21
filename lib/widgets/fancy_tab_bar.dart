@@ -132,9 +132,10 @@ class _FancyTabBarState extends State<FancyTabBar>
         ),
         IgnorePointer(
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-            ),
+            color: Colors.transparent,
+            // decoration: BoxDecoration(
+            //   color: Colors.transparent,
+            // ),
             child: Align(
               heightFactor: 1,
               alignment: Alignment(_positionAnimation.value, 0),
