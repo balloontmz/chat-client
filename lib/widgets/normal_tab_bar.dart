@@ -30,7 +30,7 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
         BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('个人中心')),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.teal,
+      selectedItemColor: Color(0xFF8c77ec),
       onTap: _onItemTapped,
     );
   }

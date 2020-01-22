@@ -7,6 +7,7 @@ import 'package:chat/widgets/fancy_tab_bar.dart';
 import 'package:chat/widgets/group_side_drawer.dart';
 import 'package:chat/widgets/normal_tab_bar.dart';
 import 'package:chat/widgets/user_center_app_bar.dart';
+import 'package:chat/widgets/user_center_content_list.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomePage extends State<HomePage> {
         break;
       case FIND:
         drawer = new Drawer();
-        child = new UserCenter();
+        child = new FindPage();
         appBar = new AppBar(
           backgroundColor: Color(0xFF8c77ec),
           title: new Text("发现"),
@@ -49,7 +50,7 @@ class _HomePage extends State<HomePage> {
         break;
       case CENTER:
         drawer = new Drawer();
-        child = new Container();
+        child = new UserCenterContentList();
         appBar = new UserCenterAppbar(
           title: '个人中心',
           // leadingWidget: new Text('前置'),

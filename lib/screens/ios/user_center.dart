@@ -4,12 +4,12 @@ import 'package:chat/widgets/search_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class UserCenter extends StatefulWidget {
+class FindPage extends StatefulWidget {
   @override
-  State createState() => new _UserCenter();
+  State createState() => new _FindPage();
 }
 
-class _UserCenter extends State<UserCenter> {
+class _FindPage extends State<FindPage> {
   @override
   Widget build(BuildContext context) {
     return new GridPage();

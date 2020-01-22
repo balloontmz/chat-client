@@ -1,3 +1,4 @@
+import 'package:chat/widgets/user_center_info_row.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +81,7 @@ class _UserCenterAppbarState extends State<UserCenterAppbar> {
                   ],
                 ),
               ),
-              new Text('test'),
+              new UserInfoRow(),
             ],
           ),
         ),

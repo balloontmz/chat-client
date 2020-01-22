@@ -35,14 +35,21 @@ class GridPageState extends State<GridPage> with AutomaticKeepAliveClientMixin {
           crossAxisCount: 4,
           mainAxisSpacing: 4.0,
           crossAxisSpacing: 4.0,
-          itemBuilder: (context, index) => TileCard(
-            img: '${posts[index]['goods_pic']}',
-            title: '${posts[index]['goods_short_title']}',
-            author: '${posts[index]['goods_price']}',
-            authorUrl: '${posts[index]['goods_pic']}',
-            type: '${posts[index]['goods_pic']}',
-            worksAspectRatio: posts[index]['dsr'],
-          ),
+          itemBuilder: (context, index) {
+            String img = '${posts[index]['goods_pic']}';
+            if (index == 0) {
+              img = '';
+            }
+            return TileCard(
+              img: img,
+              // img: '${posts[index]['goods_pic']}',
+              title: '${posts[index]['goods_short_title']}',
+              author: '${posts[index]['goods_price']}',
+              authorUrl: '${posts[index]['goods_pic']}',
+              type: '${posts[index]['goods_pic']}',
+              worksAspectRatio: posts[index]['dsr'],
+            );
+          },
           staggeredTileBuilder: (index) => StaggeredTile.fit(2),
         ),
       ),

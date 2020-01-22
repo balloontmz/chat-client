@@ -18,7 +18,7 @@ class Routers {
       return new ChatScreen(groupID: arguments['group_id']);
     },
     '/group': (context) => HomePage(),
-    '/user-center': (context) => UserCenter(),
+    '/user-center': (context) => FindPage(),
   };
 
   static String currentRouteName = "";
