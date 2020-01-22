@@ -24,27 +24,39 @@ class UserCenterContentList extends StatelessWidget {
   }
 
   Widget _buildRowItem(String title, {IconData iconD}) {
-    return new GestureDetector(
-      child: new Row(
-        children: <Widget>[
-          new IconButton(
-            icon: new Icon(iconD ?? Icons.perm_device_information),
-            onPressed: null,
-          ),
-          new Column(
-            children: <Widget>[
-              new Text(title),
-            ],
-          ),
-        ],
-      ),
+    return new ListTile(
+      onTap: () {
+        Log.i("点击了 tile,准备进入聊天详情");
+        // Routers.push(
+        //   "/home",
+        //   context,
+        //   {"group_id": items[index].id},
+        // );
+      }, //
+      leading: new Icon(iconD ?? Icons.perm_device_information),
+      title: new Text(title),
     );
+    // new GestureDetector(
+    //   child: new Row(
+    //     children: <Widget>[
+    //       new IconButton(
+    //         icon: new Icon(iconD ?? Icons.perm_device_information),
+    //         onPressed: null,
+    //       ),
+    //       new Column(
+    //         children: <Widget>[
+    //           new Text(title),
+    //         ],
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _buildDivider() {
     return new Divider(
       height: 1.0,
-      indent: 50.0,
+      indent: 60.0,
       color: Colors.grey,
     );
   }

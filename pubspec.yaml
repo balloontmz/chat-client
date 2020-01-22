@@ -50,6 +50,8 @@ dependencies:
 
   flutter_screenutil: ^1.0.2 # 屏幕尺寸工具插件
 
+  image_picker: ^0.6.3+1
+
   # rxdart: ^0.23.1 # 此包的状态管理功能被 flutter 原生代替
 
 dev_dependencies:

@@ -67,21 +67,25 @@ class DioUtil {
   // 数据返回格式统一，统一处理异常
   Future<BaseEntity<T>> _request<T>(String method, String url,
       {dynamic data,
+      bool useConfig,
       Map<String, dynamic> queryParameters,
       CancelToken cancelToken,
       Options options}) async {
     String storageUrl = "";
-    await TokenUtil.getEnvironment().then((res) {
-      if (res == "dev") {
-        Log.e('进入此处');
-        storageUrl = Api.DEV_BASE_URL;
-        url = Api.DEV_BASE_URL + url;
-      } else {
-        Log.e('进入此处2');
-        storageUrl = Api.BASE_URL;
-        url = Api.BASE_URL + url;
-      }
-    });
+    //只有在选择
+    if (useConfig != true) {
+      await TokenUtil.getEnvironment().then((res) {
+        if (res == "dev") {
+          Log.e('进入此处');
+          storageUrl = Api.DEV_BASE_URL;
+          url = Api.DEV_BASE_URL + url;
+        } else {
+          Log.e('进入此处2');
+          storageUrl = Api.BASE_URL;
+          url = Api.BASE_URL + url;
+        }
+      });
+    }
 
     var response = await _dio.request(url,
         data: data,
@@ -113,22 +117,27 @@ class DioUtil {
       {Function(BaseEntity<T> t) onSuccess,
       Function(int code, String msg) onError,
       dynamic params,
+      bool useConfig,
       Map<String, dynamic> queryParameters,
       CancelToken cancelToken,
       Options options,
       bool isList: false}) async {
     String m = _getRequestMethod(method);
-    return await _request<T>(m, url,
-            data: params,
-            queryParameters: queryParameters,
-            options: options,
-            cancelToken: cancelToken)
-        .then((BaseEntity<T> result) {
+    return await _request<T>(
+      m,
+      url,
+      data: params,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      useConfig: useConfig,
+    ).then((BaseEntity<T> result) {
       if (result.ret == 1) {
         if (onSuccess != null) {
           onSuccess(result);
         }
       } else {
+        // Log.i("数据未被正确格式化 $result");
         _onError(result.ret, result.message, onError);
       }
     }, onError: (e, _) {
@@ -144,19 +153,22 @@ class DioUtil {
       Function(List<T> list) onSuccessList,
       Function(int code, String msg) onError,
       dynamic params,
+      bool useConfig,
       Map<String, dynamic> queryParameters,
       CancelToken cancelToken,
       Options options,
       bool isList: false}) {
     String m = _getRequestMethod(method);
     //此处原来使用 rxdart 进行异步请求,后来 Observable 移除,改为了原生的
-    Stream.fromFuture(_request<T>(m, url,
-            data: params,
-            queryParameters: queryParameters,
-            options: options,
-            cancelToken: cancelToken))
-        .asBroadcastStream()
-        .listen((result) {
+    Stream.fromFuture(_request<T>(
+      m,
+      url,
+      data: params,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      useConfig: useConfig,
+    )).asBroadcastStream().listen((result) {
       if (result.ret == 1) {
         if (onSuccess != null) {
           onSuccess(result.data);

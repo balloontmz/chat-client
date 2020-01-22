@@ -43,6 +43,10 @@ class ChatMsg {
   ///序列化
   Map<String, dynamic> toJson() => {
         'id': this.id,
+        'user_id': userID,
+        'group_id': groupID,
+        'msg': msg,
+        'type': type,
       };
 
   Map<String, dynamic> toMap() {
@@ -69,6 +73,7 @@ class ChatMsg {
   static Future<ChatMsg> insert(ChatMsg chatMsg) async {
     Database db = await SqliteUtil.instance.database;
     ChatMsg msg = await getMsg(chatMsg.id);
+    Log.i("准备插入数据库的数据为: " + jsonEncode(chatMsg.toJson()));
     if (msg == null) {
       Log.i("进入此处代表接收到本地数据库不存在的数据,插入");
       await db.insert('chat_msg', chatMsg.toMap());
@@ -90,7 +95,7 @@ class ChatMsg {
   static Future<ChatMsg> getMsg(int id) async {
     Database db = await SqliteUtil.instance.database;
     List<Map> maps = await db.query('chat_msg',
-        columns: ['id', 'user_id', 'group_id', 'msg'],
+        columns: ['id', 'user_id', 'group_id', 'msg', 'type'],
         where: 'id = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
@@ -103,7 +108,7 @@ class ChatMsg {
     Database db = await SqliteUtil.instance.database;
     List<Map> maps = await db.query(
       'chat_msg',
-      columns: ['id', 'user_id', 'group_id', 'msg'],
+      columns: ['id', 'user_id', 'group_id', 'msg', 'type'],
     );
     if (maps.length > 0) {
       return maps.map((dynamic model) => ChatMsg.fromMap(model)).toList();

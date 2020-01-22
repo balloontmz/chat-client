@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:chat/common/global.dart';
 import 'package:chat/events/events.dart';
 import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/token_info.dart';
 import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/qiniu_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -68,7 +71,8 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     this.msgSubscription =
         ApplicationEvent.event.on<RecMsgFromServer>().listen((event) async {
-      Log.i("聊天室接收来自服务器的消息" + event.msg.msg);
+      Log.i("聊天室接收来自服务器的消息 ${event.msg} 消息动作为: ${event.msg.type}, 内容为:" +
+          event.msg.msg);
 
       Log.i("获取到的用户 id 为: $userID");
 
@@ -91,6 +95,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             duration: new Duration(microseconds: 700),
             vsync: this,
           ),
+          action: msg.type,
           left: false,
         );
       } else {
@@ -100,6 +105,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             duration: new Duration(microseconds: 700),
             vsync: this,
           ),
+          action: msg.type,
         );
       }
 
@@ -211,7 +217,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     // );
   }
 
-  void _handleSubmitted(String text) {
+  void _handleSubmitted(String text, {int action = 1}) {
     _textController.clear();
     setState(() {
       _isComposing = false;
@@ -228,7 +234,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     // });
 
     String msg = jsonEncode({
-      "action": 1,
+      "action": action,
       "data": {
         "group_id": widget.groupID,
         "msg": text,
@@ -252,6 +258,23 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: new Row(
           children: <Widget>[
+            //摄像机按钮
+            new Container(
+              margin: new EdgeInsets.symmetric(horizontal: 4.0),
+              child: new IconButton(
+                icon: new Icon(Icons.photo_camera),
+                onPressed: () async {
+                  File imageFile = await ImagePicker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  String res = await (new QiniuUtil()).uploadImage(
+                    await imageFile.readAsBytes(),
+                  );
+                  Log.i("上传图片的返回结果为: ${res}");
+                  _handleSubmitted(res, action: 2);
+                },
+              ),
+            ),
             new Flexible(
               child: new TextField(
                 controller: _textController,

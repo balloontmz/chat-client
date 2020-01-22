@@ -1,12 +1,15 @@
 import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/qiniu_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const String _name = "someone";
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController, this.left = true});
+  ChatMessage(
+      {this.text, this.animationController, this.left = true, this.action = 1});
   final String text;
+  final int action;
 
   ///变量存储动画控制器
   final AnimationController animationController;
@@ -41,10 +44,7 @@ class ChatMessage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               new Text(_name, style: Theme.of(context).textTheme.subhead),
-              new Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: new Text(text),
-              )
+              _buildContent(context),
             ],
           ),
         ),
@@ -72,14 +72,27 @@ class ChatMessage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Text(_name, style: Theme.of(context).textTheme.subhead),
-              new Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: new Text(text),
-              )
+              _buildContent(context),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    if (this.action == 2) {
+      return new Container(
+        margin: const EdgeInsets.only(top: 5.0),
+        child: new Image.network(
+          QiniuUtil.getImageFullPath(text),
+          width: 250.0,
+        ),
+      );
+    }
+    return new Container(
+      margin: const EdgeInsets.only(top: 5.0),
+      child: new Text(text),
     );
   }
 }

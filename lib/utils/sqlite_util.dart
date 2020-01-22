@@ -24,7 +24,7 @@ class SqliteUtil {
   static Future<Database> _getDatabase() async {
     return openDatabase(
       // Set the path to the database.
-      join(await getDatabasesPath(), 'chat2.db'),
+      join(await getDatabasesPath(), 'chat3.db'),
       // When the database is first created, create a table to store dogs.
       onCreate: (db, version) async {
         // Run the CREATE TABLE statement on the database.

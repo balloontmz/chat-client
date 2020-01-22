@@ -1,6 +1,6 @@
 import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
-import 'package:chat/screens/ios/user_center.dart';
+import 'package:chat/screens/ios/find.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';

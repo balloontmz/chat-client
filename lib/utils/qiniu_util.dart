@@ -1,73 +1,85 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:chat/api/api.dart';
+import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/net_intercept.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
-typedef onData = void Function(dynamic event);
-
+///TODO: 每个用户应该上传到自己的文件夹!!!
 class QiniuUtil {
-  static const MethodChannel _channel =
-      const MethodChannel('sy_flutter_qiniu_storage');
-  static const EventChannel _eventChannel =
-      const EventChannel('sy_flutter_qiniu_storage_event');
+  //七牛的请求
+  static const String QINIU_UPLOAD = 'http://up-z2.qiniup.com';
 
-  Stream _onChanged;
+  static const String QINIU_STORAGE_URL = 'http://qiniu.tomtiddler.top/';
 
-  Stream onChanged() {
-    if (_onChanged == null) {
-      _onChanged = _eventChannel.receiveBroadcastStream();
+  static final QiniuUtil _singleton = QiniuUtil._internal();
+
+  static QiniuUtil get instance => QiniuUtil();
+
+  factory QiniuUtil() {
+    return _singleton;
+  }
+
+  static Dio _dio;
+
+  Dio getDio() {
+    return _dio;
+  }
+
+  QiniuUtil._internal() {
+    var options = BaseOptions(
+      connectTimeout: 25000,
+      receiveTimeout: 30000,
+      responseType: ResponseType.plain,
+      validateStatus: (status) {
+        // 不使用http状态码判断状态，使用AdapterInterceptor来处理（适用于标准REST风格）
+        return true;
+      },
+      // baseUrl: baseUrl,
+    );
+    _dio = Dio(options);
+
+    _dio.interceptors.add(LoggingInterceptor());
+  }
+
+  uploadImageTest() async {
+    Log.i("上传图片测试进入此处");
+    String token = await Api.getQiNiuToken();
+    Log.i("获取到七牛临时的 token 为: $token");
+
+    FormData formData = new FormData.fromMap({
+      "token": token,
+      //文件存入七牛会重新命名,所以此处并不指定对应的
+      "file": await MultipartFile.fromFile(
+        "/Users/tomtiddler/Code/flutter-code/chat/images/avatar1.jpg",
+      ),
+    });
+    _dio.options.headers['content-type'] = "multipart/form-data";
+    Response response = await _dio.post(QINIU_UPLOAD, data: formData);
+    Log.i("返回的结果为: ${response.data}");
+  }
+
+  Future<String> uploadImage(Uint8List bytes) async {
+    String token = await Api.getQiNiuToken();
+    FormData formData = new FormData.fromMap({
+      "token": token,
+      //文件存入七牛会重新命名,所以此处并不指定对应的
+      "file": await MultipartFile.fromBytes(bytes),
+    });
+    _dio.options.headers['content-type'] = "multipart/form-data";
+    Response response = await _dio.post(QINIU_UPLOAD, data: formData);
+
+    var data = jsonDecode(response.data);
+    if (data['key'] != null) {
+      return data['key'];
     }
-    return _onChanged;
+    return "";
   }
 
-  ///上传
-  ///
-  /// key 保存到七牛的文件名
-  Future<bool> upload(String filepath, String token, String key) async {
-    var res = await _channel.invokeMethod('upload',
-        <String, String>{"filepath": filepath, "token": token, "key": key});
-    return res;
+  static String getImageFullPath(String key) {
+    return QINIU_STORAGE_URL + key;
   }
-
-  /// 取消上传
-  static cancelUpload() {
-    _channel.invokeMethod('cancelUpload');
-  }
-
-  // var putPolicy = {
-  //   'scope': 'my-bucket:sunflower.jpg',
-  //   'deadline': 1451491200,
-  //   'returnBody':
-  //       r'''{"name":$(fname),"size":$(fsize),"w":$(imageInfo.width),"h":$(imageInfo.height),"hash":$(etag)}''', // 这是个已经经过一次序列化的 json 字符串!!!
-  // };
-  // var putPolicyJson = jsonEncode(putPolicy);
-  // Log.i("序列完成之后的结果为:");
-  // Log.i(putPolicyJson);
-  // var putPolicyByte = utf8.encode(putPolicyJson);
-  // var putPolicyBase64 = base64UrlEncode(putPolicyByte);
-  // Log.i("base64encode 之后的结果为:" + putPolicyBase64);
-
-  // var hasher = new Hmac(sha1, utf8.encode("MY_SECRET_KEY"));
-  // var sign = hasher.convert(utf8.encode(putPolicyBase64));
-  // var sign2 = hasher.convert(putPolicyByte);
-
-  // Log.i("签名结果分别为:");
-  // Log.i("${sign.bytes}");
-  // Log.i("${sign2.bytes}");
-
-  // if (sign.bytes == sign2.bytes) {
-  //   Log.i("两种签名相等");
-  // } else {
-  //   Log.i("两种签名不等");
-  // }
-
-  // var demoByte = base64Decode(
-  //     "eyJzY29wZSI6Im15LWJ1Y2tldDpzdW5mbG93ZXIuanBnIiwiZGVhZGxpbmUiOjE0NTE0OTEyMDAsInJldHVybkJvZHkiOiJ7XCJuYW1lXCI6JChmbmFtZSksXCJzaXplXCI6JChmc2l6ZSksXCJ3XCI6JChpbWFnZUluZm8ud2lkdGgpLFwiaFwiOiQoaW1hZ2VJbmZvLmhlaWdodCksXCJoYXNoXCI6JChldGFnKX0ifQ==");
-
-  // var demoJson = utf8.decode(demoByte);
-  // Log.i("demo 的原始字符串为:" + demoJson);
-  // if (putPolicyJson == demoJson) {
-  //   Log.i("两值相等");
-  // } else {
-  //   Log.i("两值不等");
-  // }
 }

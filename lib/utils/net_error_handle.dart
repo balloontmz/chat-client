@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat/utils/log_util.dart';
 import 'package:dio/dio.dart';
 
 class ExceptionHandle {
@@ -19,6 +20,7 @@ class ExceptionHandle {
   static const int unknown_error = 9999;
 
   static NetError handleException(dynamic error) {
+    Log.i("http 请求发生错误");
     print(error);
     if (error is DioError) {
       if (error.type == DioErrorType.DEFAULT ||

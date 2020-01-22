@@ -195,6 +195,7 @@ class AdapterInterceptor extends Interceptor {
             } else if (map.containsKey(MSG)) {
               msg = map[MSG];
             } else {
+              Log.i("未知错误解析为: $map");
               msg = "未知异常";
             }
             //"{\"ret\":%d,\"msg\":\"%s\"}";

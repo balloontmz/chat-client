@@ -5,6 +5,7 @@ import 'package:chat/models/chat_msg.dart';
 import 'package:chat/models/token_info.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:chat/utils/dio_util.dart';
@@ -20,6 +21,8 @@ class Api {
   static const String DEV_STORAGE_URL = 'http://localhost:1323/';
 
   static const String LOGIN = 'user/login';
+
+  static const String QINIU = 'upload';
 
   static const String CHAT_GROUP = 'group';
   static const String CHAT_MSG = 'msg';
@@ -95,6 +98,22 @@ class Api {
     );
 
     return resultList;
+  }
+
+  static Future<String> getQiNiuToken() async {
+    String result;
+    await DioUtil.instance.requestNetwork(
+      Method.get,
+      Api.QINIU,
+      onSuccess: (response) {
+        result = response.data;
+      },
+      onError: (id, msg) {
+        Log.i("请求出错,错误原因为: $msg");
+      },
+    );
+
+    return result;
   }
 
   static login(

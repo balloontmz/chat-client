@@ -3,7 +3,7 @@ import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/screens/ios/home.dart';
 import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/sign_up.dart';
-import 'package:chat/screens/ios/user_center.dart';
+import 'package:chat/screens/ios/find.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

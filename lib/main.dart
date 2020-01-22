@@ -10,6 +10,7 @@ import 'package:chat/routers/routers.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/screens/ios/home.dart';
 import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/qiniu_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
 import 'package:chat/widgets/grid_page.dart';
@@ -26,8 +27,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() async {
   // runApp(new GridPage());
-
   WidgetsFlutterBinding.ensureInitialized();
+  await (new QiniuUtil()).uploadImageTest();
   var token = await TokenUtil.getToken();
   var userName = await TokenUtil.getAccountName();
   var environment = await TokenUtil.getEnvironment();

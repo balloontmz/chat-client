@@ -38,6 +38,7 @@ class GroupSideDrawer extends StatelessWidget {
                         child: new Container(
                           padding: const EdgeInsets.only(right: 12.0),
                           child: new CircleAvatar(
+                            backgroundColor: Color(0xFF8c77ec),
                             child: new Text(name),
                           ),
                         ),
@@ -58,7 +59,7 @@ class GroupSideDrawer extends StatelessWidget {
                       new Expanded(
                         flex: 6,
                         child: new IconButton(
-                          color: Colors.blue,
+                          color: Color(0xFF8c77ec),
                           icon: Icon(Icons.done_outline),
                           iconSize: 25,
                           alignment: Alignment.centerRight,
