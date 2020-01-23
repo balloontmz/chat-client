@@ -24,7 +24,7 @@ class GroupSideDrawer extends StatelessWidget {
       child: new ListView(
         children: <Widget>[
           new Container(
-            height: 250,
+            height: 100,
             child: new DrawerHeader(
               // margin: const EdgeInsets.only(bottom: 200.0),
               // padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
@@ -70,13 +70,13 @@ class GroupSideDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  _drawerOption(new Icon(Icons.account_circle), "个人资料"),
-                  // _drawerOption(new Icon(Icons.settings), "应用设置"),
-                  _drawerLogout(new Icon(Icons.arrow_back), "注销", context)
                 ],
               ),
             ),
           ),
+          _drawerOption(new Icon(Icons.account_circle), "个人资料"),
+          // _drawerOption(new Icon(Icons.settings), "应用设置"),
+          _drawerLogout(new Icon(Icons.arrow_back), "注销", context),
         ],
       ),
     );
@@ -84,7 +84,7 @@ class GroupSideDrawer extends StatelessWidget {
 
   Widget _drawerOption(Icon icon, String name) {
     return new Container(
-      padding: const EdgeInsets.only(top: 22.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 22.0, 0.0, 0.0),
       child: new Row(
         children: <Widget>[
           new Container(
@@ -103,7 +103,7 @@ class GroupSideDrawer extends StatelessWidget {
         Routers.push('/login', context);
       },
       child: new Container(
-        padding: const EdgeInsets.only(top: 22.0),
+        padding: const EdgeInsets.fromLTRB(10.0, 22.0, 0.0, 22.0),
         child: new Row(
           children: <Widget>[
             new Container(

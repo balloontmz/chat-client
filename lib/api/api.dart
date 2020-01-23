@@ -135,4 +135,21 @@ class Api {
       onFail(msg);
     });
   }
+
+  static Future createGroup(args) async {
+    var result;
+    await DioUtil.instance.requestNetwork(
+      Method.post,
+      Api.CHAT_GROUP,
+      params: args,
+      onSuccess: (response) {
+        result = response.data;
+      },
+      onError: (id, msg) {
+        Log.i("请求出错,错误原因为: $msg");
+      },
+    );
+
+    return;
+  }
 }

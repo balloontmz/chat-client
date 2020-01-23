@@ -4,6 +4,7 @@ import 'package:chat/screens/ios/find.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:chat/widgets/group_float_btn.dart';
 import 'package:chat/widgets/group_side_drawer.dart';
 import 'package:chat/widgets/normal_tab_bar.dart';
 import 'package:chat/widgets/user_center_app_bar.dart';
@@ -30,6 +31,7 @@ class _HomePage extends State<HomePage> {
     Widget drawer; // 抽屉属于最上层渲染,放在此处,根据不同的页面渲染不同的内容
     Widget child;
     PreferredSizeWidget appBar;
+    Widget floatBtn;
     switch (this.page) {
       case HOME:
         Log.i("进入此处聊天室列表");
@@ -39,6 +41,7 @@ class _HomePage extends State<HomePage> {
           backgroundColor: Color(0xFF8c77ec),
           title: new Text("chat"),
         );
+        floatBtn = new GroupFloatBtn();
         break;
       case FIND:
         drawer = new Drawer();
@@ -73,6 +76,7 @@ class _HomePage extends State<HomePage> {
       drawer: drawer,
       bottomNavigationBar: HomeBottomNavigationBar(_switchBottom), // 此导航栏
       body: child,
+      floatingActionButton: floatBtn,
     );
   }
 

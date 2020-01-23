@@ -1,3 +1,4 @@
+import 'package:chat/screens/ios/add_group.dart';
 import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/screens/ios/home.dart';
@@ -7,6 +8,7 @@ import 'package:chat/screens/ios/find.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:web_socket_channel/io.dart';
 
 class Routers {
@@ -19,6 +21,12 @@ class Routers {
     },
     '/group': (context) => HomePage(),
     '/user-center': (context) => FindPage(),
+    '/add-group': (context, {arguments}) {
+      if (arguments != null) {
+        return AddGroup(avatar: arguments['avatar']);
+      }
+      return AddGroup();
+    },
   };
 
   static String currentRouteName = "";
