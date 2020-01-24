@@ -84,12 +84,7 @@ class _GroupChatListState extends State<GroupChatList> {
                 {"group_id": items[index].id},
               );
             }, //
-            leading: new Image.asset(
-              "images/avatar1.jpg",
-              width: 40.0,
-              height: 40.0,
-              fit: BoxFit.cover,
-            ),
+            leading: _buildGroupAvatar(items[index].avatar),
             title:
                 new Text(items[index].name == '' ? '没有名字' : items[index].name),
             subtitle: new Text("你高考考了满分你知道吗？"),
@@ -98,6 +93,23 @@ class _GroupChatListState extends State<GroupChatList> {
         ],
       );
     };
+  }
+
+  Widget _buildGroupAvatar(String avatar) {
+    if (avatar == null || avatar == "") {
+      return new Image.asset(
+        "images/avatar1.jpg",
+        width: 40.0,
+        height: 40.0,
+        fit: BoxFit.cover,
+      );
+    }
+    return new Image.network(
+      avatar,
+      width: 40.0,
+      height: 40.0,
+      fit: BoxFit.cover,
+    );
   }
 
   void loadData({bool fresh}) async {

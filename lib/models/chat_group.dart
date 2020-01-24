@@ -4,11 +4,13 @@ import 'package:chat/utils/log_util.dart';
 
 class ChatGroup {
   String name;
+  String avatar;
   int id;
 
   ChatGroup({
     this.id,
     this.name,
+    this.avatar,
   });
 
   ///反序列化
@@ -18,6 +20,7 @@ class ChatGroup {
     return ChatGroup(
       id: json['id'],
       name: json['name'],
+      avatar: json['avatar'],
     );
   }
 
@@ -32,5 +35,6 @@ class ChatGroup {
   Map<String, dynamic> toJson() => {
         'id': this.id,
         'name': this.name,
+        'avatar': this.avatar,
       };
 }
