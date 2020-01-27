@@ -57,24 +57,26 @@ class SearchBarDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     // TODO: implement buildActions
-
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        //将搜索内容置为空
-        onPressed: () => query = "",
-      )
-    ];
+    return null;
+    // return [
+    //   IconButton(
+    //     icon: Icon(Icons.clear),
+    //     //将搜索内容置为空
+    //     onPressed: () => query = "",
+    //   )
+    // ];
   }
 
 //重写返回图标
   @override
   Widget buildLeading(BuildContext context) {
+    // return null;
     return IconButton(
-        icon: AnimatedIcon(
-            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-        //关闭上下文，当前页面
-        onPressed: () => close(context, null));
+      icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      //关闭上下文，当前页面
+      onPressed: () => close(context, null),
+    );
   }
 
   //重写搜索结果

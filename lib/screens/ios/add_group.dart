@@ -7,6 +7,7 @@ import 'package:chat/utils/qiniu_util.dart';
 import 'package:chat/utils/util.dart';
 import 'package:chat/widgets/add_group_float_btn.dart';
 import 'package:chat/widgets/copy_image_route.dart';
+import 'package:chat/widgets/image_buttom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -97,7 +98,7 @@ class _AddGroupState extends State<AddGroup> {
                 width: 270.0,
                 child: RaisedButton(
                   child: Text(
-                    'Login',
+                    '创建群聊',
                     style: Theme.of(context).primaryTextTheme.headline,
                   ),
                   color: Colors.black,
@@ -131,6 +132,7 @@ class _AddGroupState extends State<AddGroup> {
 
     Log.i("创建群聊的返回结果为: $result");
     //TODO: 添加完成之后,是否需要弹回上一个页面,是否需要加入弹窗提示一类的
+    Routers.pop(context);
 
     return false;
   }
@@ -189,48 +191,50 @@ class _AddGroupState extends State<AddGroup> {
   _onGroupAvatarBtnPress() {
     File imageFile;
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return new Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              new ListTile(
-                // leading: new Icon(Icons.photo_camera),
-                title: new Center(
-                  child: new Text("Camera"),
-                ),
+      context: context,
+      builder: imageButtomSheetBuilder(context, cropImage),
+    );
+    // builder: (BuildContext context) {
+    //   return new Column(
+    //     // mainAxisAlignment: MainAxisAlignment.center,
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: <Widget>[
+    //       new ListTile(
+    //         // leading: new Icon(Icons.photo_camera),
+    //         title: new Center(
+    //           child: new Text("Camera"),
+    //         ),
 
-                onTap: () async {
-                  await getImage();
-                  Navigator.pop(context);
-                },
-              ),
-              new ListTile(
-                // leading: new Icon(Icons.photo_library),
-                title: new Center(
-                  child: new Text("Gallery"),
-                ),
-                onTap: () async {
-                  await chooseImage();
-                  Navigator.pop(context);
-                },
-              ),
-              new Divider(
-                thickness: 3,
-              ),
-              new ListTile(
-                // leading: new Icon(Icons.photo_library),
-                title: new Center(
-                  child: new Text("Gallery"),
-                ),
-                onTap: () async {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
+    //         onTap: () async {
+    //           await getImage();
+    //           Navigator.pop(context);
+    //         },
+    //       ),
+    //       new ListTile(
+    //         // leading: new Icon(Icons.photo_library),
+    //         title: new Center(
+    //           child: new Text("Gallery"),
+    //         ),
+    //         onTap: () async {
+    //           await chooseImage();
+    //           Navigator.pop(context);
+    //         },
+    //       ),
+    //       new Divider(
+    //         thickness: 3,
+    //       ),
+    //       new ListTile(
+    //         // leading: new Icon(Icons.photo_library),
+    //         title: new Center(
+    //           child: new Text("Gallery"),
+    //         ),
+    //         onTap: () async {
+    //           Navigator.pop(context);
+    //         },
+    //       ),
+    //     ],
+    //   );
+    // });
   }
 
   ///拍摄照片

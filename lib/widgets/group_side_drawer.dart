@@ -5,10 +5,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
-class GroupSideDrawer extends StatelessWidget {
+class GroupSideDrawer extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new _GroupSideDrawerState();
+  }
+}
+
+class _GroupSideDrawerState extends State<GroupSideDrawer> {
   String name = "null";
   String phone = "null";
-  String email = "null";
+  String avatar;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
+
+  void getUserInfo() async {
+    name = await TokenUtil.getUserName();
+    avatar = await TokenUtil.getAvatar();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +56,16 @@ class GroupSideDrawer extends StatelessWidget {
                         flex: 2,
                         child: new Container(
                           padding: const EdgeInsets.only(right: 12.0),
-                          child: new CircleAvatar(
-                            backgroundColor: Color(0xFF8c77ec),
-                            child: new Text(name),
-                          ),
+                          child: this.avatar != null
+                              ? new CircleAvatar(
+                                  // backgroundColor: Color(0xFF8c77ec),
+                                  backgroundImage: NetworkImage(this.avatar),
+                                  // child: new Image.network(this.avatar),
+                                )
+                              : new CircleAvatar(
+                                  backgroundColor: Color(0xFF8c77ec),
+                                  child: new Text('T'),
+                                ),
                         ),
                       ),
                       new Expanded(
@@ -60,7 +85,7 @@ class GroupSideDrawer extends StatelessWidget {
                         flex: 6,
                         child: new IconButton(
                           color: Color(0xFF8c77ec),
-                          icon: Icon(Icons.done_outline),
+                          icon: Icon(Icons.chevron_right),
                           iconSize: 25,
                           alignment: Alignment.centerRight,
                           // padding: EdgeInsets.only(right: 0),

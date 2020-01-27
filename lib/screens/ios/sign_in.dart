@@ -155,9 +155,11 @@ class SignInState extends State<SignIn> {
         if (true) {
           TokenUtil.saveAccountName(username);
           TokenUtil.savePassword(password);
+          TokenUtil.saveAvatar(result.avatar);
         } else {
           TokenUtil.saveAccountName("");
           TokenUtil.savePassword("");
+          TokenUtil.saveAvatar("");
         }
         TokenUtil.saveRemember(true);
 
