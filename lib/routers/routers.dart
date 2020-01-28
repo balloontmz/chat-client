@@ -2,6 +2,8 @@ import 'package:chat/screens/ios/add_group.dart';
 import 'package:chat/screens/ios/chat_screen.dart';
 import 'package:chat/screens/ios/group_chat_list.dart';
 import 'package:chat/screens/ios/home.dart';
+import 'package:chat/screens/ios/search_group_list.dart';
+import 'package:chat/screens/ios/search_page.dart';
 import 'package:chat/screens/ios/sign_in.dart';
 import 'package:chat/screens/ios/sign_up.dart';
 import 'package:chat/screens/ios/find.dart';
@@ -21,6 +23,10 @@ class Routers {
     },
     '/group': (context) => HomePage(),
     '/user-center': (context) => FindPage(),
+    '/search-page': (context) => SearchPage(),
+    '/search-group': (context, {arguments}) {
+      return SearchGroupList(keyword: arguments['keyword']);
+    },
     '/add-group': (context, {arguments}) {
       if (arguments != null) {
         return AddGroup(avatar: arguments['avatar']);

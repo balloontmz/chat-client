@@ -25,6 +25,8 @@ class Api {
   static const String QINIU = 'upload';
 
   static const String CHAT_GROUP = 'group';
+  static const String ADD_USER2CHAT_GROUP = 'group/add-user';
+  static const String NOT_JOIN_CHAT_GROUP = 'group/not-join';
   static const String CHAT_MSG = 'msg';
 
   static const String REFRESH_TOKEN = '';
@@ -66,6 +68,43 @@ class Api {
     }, onError: (id, msg) {});
 
     return resultList;
+  }
+
+  // 未加入聊天列表
+  static Future<List<ChatGroup>> getNotJoinGroups() async {
+    List<ChatGroup> resultList = new List();
+
+    await DioUtil.instance.requestNetwork(Method.get, Api.NOT_JOIN_CHAT_GROUP,
+        onSuccess: (response) {
+      for (int i = 0; i < response.data.length; i++) {
+        try {
+          ChatGroup cellData = new ChatGroup.fromJson(response.data[i]);
+
+          // Log.i("尝试序列化 group");
+          // Log.i(jsonEncode(cellData.toJson()));
+
+          resultList.add(cellData);
+        } catch (e) {
+          // No specified type, handles all
+          Log.i("拉取 group list 进入此处发生错误");
+          Log.i(e.toString());
+        }
+      }
+    }, onError: (id, msg) {});
+
+    return resultList;
+  }
+
+  // 将用户添加进群组
+  static Future addUser2Group(int gID) async {
+    await DioUtil.instance.requestNetwork(Method.post, Api.ADD_USER2CHAT_GROUP,
+        queryParameters: {"group_id": gID}, onSuccess: (response) {
+      Log.i('添加成功');
+    }, onError: (id, msg) {
+      Log.i('添加失败');
+    });
+
+    return;
   }
 
   // 聊天消息列表

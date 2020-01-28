@@ -1,3 +1,4 @@
+import 'package:chat/routers/routers.dart';
 import 'package:flutter/material.dart';
 
 const searchList = ["wangcai", "xiaoxianrou", "dachangtui", "nvfengsi"];
@@ -24,7 +25,8 @@ class _SearchBoxState extends State<SearchBox> {
         child: new TextField(
           textAlign: TextAlign.center,
           onTap: () {
-            showSearch(context: context, delegate: SearchBarDelegate());
+            Routers.push('/search-page', context);
+            // showSearch(context: context, delegate: SearchBarDelegate());
           },
           onChanged: (v) => _textController.text = v,
           decoration: InputDecoration(
