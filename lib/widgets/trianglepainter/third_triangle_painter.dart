@@ -22,10 +22,10 @@ class ThirdTrianglePainter extends CustomPainter {
     final baseX = size.width * 1;
     final baseY = size.height * 1;
     //起点
-    _path.moveTo(0, -20);
+    _path.moveTo(0, -30);
     _path.lineTo(0, 1 * baseY);
     _path.lineTo(baseX, 1 * baseY);
-    _path.lineTo(0.65 * baseX, -20);
+    _path.lineTo(0.65 * baseX, -30);
     canvas.drawPath(_path, _paint);
   }
 

@@ -89,19 +89,40 @@ class SignInState extends State<SignIn> {
                       ),
                     ]),
               ),
-              new FlatButton(
-                child: new Container(
-                  decoration: new BoxDecoration(
-                    color: Theme.of(context).accentColor,
+              new Container(
+                padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0),
+                child: Align(
+                  child: SizedBox(
+                    height: 45.0,
+                    width: 270.0,
+                    child: RaisedButton(
+                      child: Text(
+                        'Sign In',
+                        style: Theme.of(context).primaryTextTheme.headline,
+                      ),
+                      color: Colors.blue,
+                      onPressed: _onPressLogin,
+                      // shape: StadiumBorder(side: BorderSide()),
+                    ),
                   ),
-                  child: new Center(
-                      child: new Text("Sign In",
-                          style: new TextStyle(
-                            color: const Color(0xff000000),
-                          ))),
                 ),
-                onPressed: _onPressLogin,
               ),
+              // new FlatButton(
+              //   child: new Container(
+              //     // alignment: Alignment.center,
+              //     // width: MediaQuery.of(context).size.width * 0.8,
+              //     height: 30.0,
+              //     decoration: new BoxDecoration(
+              //       color: Theme.of(context).accentColor,
+              //     ),
+              //     child: new Center(
+              //         child: new Text("Sign In",
+              //             style: new TextStyle(
+              //               color: const Color(0xff000000),
+              //             ))),
+              //   ),
+              //   onPressed: _onPressLogin,
+              // ),
               //登录按钮下方文字
               new Center(
                   child: new FlatButton(

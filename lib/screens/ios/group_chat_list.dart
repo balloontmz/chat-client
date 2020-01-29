@@ -87,7 +87,11 @@ class _GroupChatListState extends State<GroupChatList> {
             leading: _buildGroupAvatar(items[index].avatar),
             title:
                 new Text(items[index].name == '' ? '没有名字' : items[index].name),
-            subtitle: new Text("你高考考了满分你知道吗？"),
+            subtitle: (items[index].preview == null)
+                ? new Text("")
+                : (items[index].preview.type == 1
+                    ? new Text(items[index].preview.msg)
+                    : new Text("[图片]")),
             trailing: new Text("9:00"),
           ),
         ],
@@ -121,6 +125,11 @@ class _GroupChatListState extends State<GroupChatList> {
       items = new List(); // 首先置空
 
       groups = await Api.getGroups();
+
+      for (var i = 0; i < groups.length; i++) {
+        groups[i].preview = await groups[i].getFirstMsg();
+        Log.i("当前的 preview 的值为: ${groups[i].preview}");
+      }
 
       List<int> groupIDs = List();
       groups.forEach((item) {

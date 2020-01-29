@@ -21,6 +21,7 @@ class Api {
   static const String DEV_STORAGE_URL = 'http://47.100.124.234:1323/';
 
   static const String LOGIN = 'user/login';
+  static const String REGISTER = 'user/register';
 
   static const String QINIU = 'upload';
 
@@ -185,6 +186,22 @@ class Api {
         TokenUtil.saveUserName(tokenInfo.username);
         TokenUtil.saveUserId(tokenInfo.userid);
         onSuccess(tokenInfo);
+        return true;
+      } else {
+        onFail(response.message);
+      }
+      return false;
+    }, onError: (int code, String msg) {
+      onFail(msg);
+    });
+  }
+
+  static register(
+      Map<String, dynamic> params, OnSuccess onSuccess, OnFail onFail) async {
+    await DioUtil.instance.requestNetwork(Method.post, Api.REGISTER,
+        params: params, onSuccess: (response) {
+      if (response.ret == 1) {
+        onSuccess(response);
         return true;
       } else {
         onFail(response.message);

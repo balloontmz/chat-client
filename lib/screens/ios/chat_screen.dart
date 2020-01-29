@@ -267,11 +267,13 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   File imageFile = await ImagePicker.pickImage(
                     source: ImageSource.gallery,
                   );
-                  String res = await (new QiniuUtil()).uploadImage(
-                    await imageFile.readAsBytes(),
-                  );
-                  Log.i("上传图片的返回结果为: ${res}");
-                  _handleSubmitted(res, action: 2);
+                  if (imageFile != null) {
+                    String res = await (new QiniuUtil()).uploadImage(
+                      await imageFile.readAsBytes(),
+                    );
+                    Log.i("上传图片的返回结果为: ${res}");
+                    _handleSubmitted(res, action: 2);
+                  }
                 },
               ),
             ),

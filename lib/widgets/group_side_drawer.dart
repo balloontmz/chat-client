@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:chat/routers/routers.dart';
 import 'package:chat/utils/log_util.dart';
+import 'package:chat/utils/qiniu_util.dart';
 import 'package:chat/utils/token_util.dart';
+import 'package:chat/widgets/copy_image_route.dart';
+import 'package:chat/widgets/image_buttom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -56,16 +61,20 @@ class _GroupSideDrawerState extends State<GroupSideDrawer> {
                         flex: 2,
                         child: new Container(
                           padding: const EdgeInsets.only(right: 12.0),
-                          child: this.avatar != null
-                              ? new CircleAvatar(
-                                  // backgroundColor: Color(0xFF8c77ec),
-                                  backgroundImage: NetworkImage(this.avatar),
-                                  // child: new Image.network(this.avatar),
-                                )
-                              : new CircleAvatar(
-                                  backgroundColor: Color(0xFF8c77ec),
-                                  child: new Text('T'),
-                                ),
+                          child: new FlatButton(
+                            onPressed: _onAvatarPress(context),
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: this.avatar != null
+                                ? new CircleAvatar(
+                                    // backgroundColor: Color(0xFF8c77ec),
+                                    backgroundImage: NetworkImage(this.avatar),
+                                    // child: new Image.network(this.avatar),
+                                  )
+                                : new CircleAvatar(
+                                    backgroundColor: Color(0xFF8c77ec),
+                                    child: new Text('T'),
+                                  ),
+                          ),
                         ),
                       ),
                       new Expanded(
@@ -105,6 +114,40 @@ class _GroupSideDrawerState extends State<GroupSideDrawer> {
         ],
       ),
     );
+  }
+
+  Null Function() _onAvatarPress(BuildContext context) {
+    return () {
+      showModalBottomSheet(
+        context: context,
+        builder: imageButtomSheetBuilder(context, cropImage(context)),
+      );
+    };
+  }
+
+  Future<Null> Function(File) cropImage(BuildContext context) {
+    return (File originalImage) async {
+      if (originalImage == null) {
+        return;
+      }
+      String result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CropImageRoute(originalImage)));
+      print('裁剪结果返回 $result');
+      if (result == null || result.isEmpty) {
+        print('上传失败');
+      } else {
+        print('上传成功');
+        //result是图片上传后拿到的url
+        setState(() {
+          Log.i("上一个页面的返回结果为: $result");
+          // iconUrl = result;
+          this.avatar = QiniuUtil.getImageFullPath(result);
+          // _upgradeRemoteInfo(); //后续数据处理，这里是更新头像信息
+        });
+      }
+    };
   }
 
   Widget _drawerOption(Icon icon, String name) {

@@ -1,4 +1,6 @@
+import 'package:chat/api/api.dart';
 import 'package:chat/routers/routers.dart';
+import 'package:chat/utils/log_util.dart';
 import 'package:chat/widgets/prompt_page.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +12,7 @@ class SignUp extends StatefulWidget {
 class SignUpState extends State<SignUp> {
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
-  final TextEditingController _emailController = new TextEditingController();
-  final TextEditingController _phoneController = new TextEditingController();
+  final TextEditingController _confirmController = new TextEditingController();
 
   PromptPage promptPage = new PromptPage();
 
@@ -28,13 +29,20 @@ class SignUpState extends State<SignUp> {
           context, "Username or password format is incorrect!");
       return;
     }
-    _userLogUp(_usernameController.text, _passwordController.text,
-        email: _emailController.text, phone: _phoneController.text);
+    await _userLogUp(_usernameController.text, _passwordController.text,
+        confirm: _confirmController.text);
   }
 
   ///注册函数
-  void _userLogUp(String username, String password,
-      {String email, String phone}) {}
+  void _userLogUp(String username, String password, {String confirm}) async {
+    Log.i("进入用户注册点击事件");
+    await Api.register({'username': username, 'password': password}, (res) {
+      // Routers.push('/login', context);
+      Routers.pop(context);
+    }, (error) {
+      promptPage.showMessage(context, "register fail");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,40 +127,52 @@ class SignUpState extends State<SignUp> {
                       },
                     ),
                     new TextField(
-                      controller: _emailController,
+                      controller: _confirmController,
+                      obscureText: true,
                       decoration: new InputDecoration(
-                        hintText: 'E-mail',
+                        hintText: 'Confirm',
                         icon: new Icon(
-                          Icons.email,
+                          Icons.lock_open,
                         ),
                       ),
                     ),
-                    new TextField(
-                      controller: _phoneController,
-                      decoration: new InputDecoration(
-                        hintText: 'Phone',
-                        icon: new Icon(
-                          Icons.phone,
+
+                    //注册
+                    new Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20.0, 0, 0),
+                      child: Align(
+                        child: SizedBox(
+                          height: 45.0,
+                          width: 270.0,
+                          child: RaisedButton(
+                            child: Text(
+                              'Sign In',
+                              style:
+                                  Theme.of(context).primaryTextTheme.headline,
+                            ),
+                            color: Colors.blue,
+                            onPressed: _handleSubmitted,
+                            // shape: StadiumBorder(side: BorderSide()),
+                          ),
                         ),
                       ),
                     ),
-                    //登录
-                    new FlatButton(
-                      child: new Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: new BoxDecoration(
-                          color: Theme.of(context).accentColor,
-                        ),
-                        child: new Center(
-                            child: new Text("Join",
-                                style: new TextStyle(
-                                  color: const Color(0xff000000),
-                                ))),
-                      ),
-                      onPressed: () {
-                        _handleSubmitted();
-                      },
-                    ),
+                    // new FlatButton(
+                    //   child: new Container(
+                    //     width: MediaQuery.of(context).size.width,
+                    //     decoration: new BoxDecoration(
+                    //       color: Theme.of(context).accentColor,
+                    //     ),
+                    //     child: new Center(
+                    //         child: new Text("Join",
+                    //             style: new TextStyle(
+                    //               color: const Color(0xff000000),
+                    //             ))),
+                    //   ),
+                    //   onPressed: () {
+                    //     _handleSubmitted();
+                    //   },
+                    // ),
                     //返回上一级
                     new Center(
                       child: new FlatButton(

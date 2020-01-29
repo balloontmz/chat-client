@@ -24,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
               new Expanded(
                 flex: 8,
                 child: new Container(
-                  padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  padding: const EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 10.0),
                   child: new TextField(
                     controller: _controller,
                     onChanged: _keywordChanged,
@@ -46,6 +46,7 @@ class _SearchPageState extends State<SearchPage> {
               new Expanded(
                 flex: 2,
                 child: new FlatButton(
+                  padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
                   child: Text("取消"),
                   onPressed: () {
                     Routers.pop(context);
