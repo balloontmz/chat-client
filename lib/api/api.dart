@@ -97,6 +97,7 @@ class Api {
 
   // 将用户添加进群组
   static Future addUser2Group(int gID) async {
+    Log.i('用户添加群组');
     await DioUtil.instance.requestNetwork(Method.post, Api.ADD_USER2CHAT_GROUP,
         queryParameters: {"group_id": gID}, onSuccess: (response) {
       Log.i('添加成功');

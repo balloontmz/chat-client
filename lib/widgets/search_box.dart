@@ -16,30 +16,39 @@ class _SearchBoxState extends State<SearchBox> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10.0),
       child: new ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: 25,
           // maxWidth: 200,
         ),
-        child: new TextField(
-          textAlign: TextAlign.center,
-          onTap: () {
+        child: new FlatButton(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          onPressed: () {
             Routers.push('/search-page', context);
             // showSearch(context: context, delegate: SearchBarDelegate());
           },
-          onChanged: (v) => _textController.text = v,
-          decoration: InputDecoration(
-            labelText: '搜索',
-            contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
-            // hintText: '请输入搜索内容',
-            prefixIcon: Icon(Icons.search),
-            // contentPadding: EdgeInsets.all(10),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Colors.grey,
+          child: new TextField(
+            enabled: false,
+            readOnly: true,
+            textAlign: TextAlign.center,
+            // onTap: () {
+            //   Routers.push('/search-page', context);
+            //   // showSearch(context: context, delegate: SearchBarDelegate());
+            // },
+            // onChanged: (v) => _textController.text = v,
+            decoration: InputDecoration(
+              labelText: '搜索',
+              contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+              // hintText: '请输入搜索内容',
+              prefixIcon: Icon(Icons.search),
+              // contentPadding: EdgeInsets.all(10),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
           ),
         ),
       ),

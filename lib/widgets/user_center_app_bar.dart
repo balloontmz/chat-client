@@ -1,3 +1,8 @@
+import 'package:chat/widgets/trianglepainter/create_header_image.dart';
+import 'package:chat/widgets/trianglepainter/first_triangle_painter.dart';
+import 'package:chat/widgets/trianglepainter/four_triangle_painter.dart';
+import 'package:chat/widgets/trianglepainter/second_triangle_painter.dart';
+import 'package:chat/widgets/trianglepainter/third_triangle_painter.dart';
 import 'package:chat/widgets/user_center_info_row.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,45 +52,57 @@ class _UserCenterAppbarState extends State<UserCenterAppbar> {
       child: new SafeArea(
         top: true,
         child: new Container(
-          decoration: new UnderlineTabIndicator(
-            borderSide: BorderSide(width: 1.0, color: Color(0xFFeeeeee)),
-          ),
+          // decoration: new UnderlineTabIndicator(
+          //   borderSide: BorderSide(width: 1.0, color: Color(0xFFeeeeee)),
+          // ),
           height: widget.contentHeight,
-          child: new Column(
+          child: createHeaderImage(_buildContent),
+          // child: _buildContent(),
+          // child: new Stack(
+          //   children: <Widget>[
+          //     // new CustomPaint(
+          //     //   painter: new TrianglePainter(Colors.red),
+          //     // )
+          //     new Text('aaa')
+          //   ],
+          // ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return new Column(
+      children: <Widget>[
+        new Container(
+          margin: const EdgeInsets.only(top: 12),
+          width: double.infinity,
+          child: new Stack(
+            alignment: Alignment.center,
             children: <Widget>[
+              // Positioned(
+              //   left: 0,
+              //   child: new Container(
+              //     padding: const EdgeInsets.only(left: 5),
+              //     child: widget.leadingWidget,
+              //   ),
+              // ),
               new Container(
-                margin: const EdgeInsets.only(top: 12),
-                width: double.infinity,
-                child: new Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    // Positioned(
-                    //   left: 0,
-                    //   child: new Container(
-                    //     padding: const EdgeInsets.only(left: 5),
-                    //     child: widget.leadingWidget,
-                    //   ),
-                    // ),
-                    new Container(
-                      child: new Text(widget.title,
-                          style:
-                              new TextStyle(fontSize: 20, color: Colors.white)),
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: new Container(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: widget.trailingWidget,
-                      ),
-                    ),
-                  ],
+                child: new Text(widget.title,
+                    style: new TextStyle(fontSize: 20, color: Colors.white)),
+              ),
+              Positioned(
+                right: 0,
+                child: new Container(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: widget.trailingWidget,
                 ),
               ),
-              new UserInfoRow(),
             ],
           ),
         ),
-      ),
+        new UserInfoRow(),
+      ],
     );
   }
 }

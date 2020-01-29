@@ -1,5 +1,6 @@
 import 'package:chat/api/api.dart';
 import 'package:chat/models/chat_group.dart';
+import 'package:chat/routers/routers.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,13 @@ class _SearhGroupListState extends State<SearchGroupList> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: new Image.network(items[index].avatar),
+                  leading: items[index].avatar == ''
+                      ? new Text('None')
+                      : new Image.network(items[index].avatar),
                   title: new Text(items[index].name),
                   subtitle: new Text('小标题'),
                   trailing: new Icon(Icons.arrow_right),
-                  onTap: () {},
+                  onTap: _joinGroup(items[index].id),
                 );
               },
             )
@@ -69,5 +72,13 @@ class _SearhGroupListState extends State<SearchGroupList> {
       items.add(item);
     });
     setState(() {});
+  }
+
+  Function _joinGroup(int gID) {
+    Log.i('创建搜索群组列表');
+    return () async {
+      await Api.addUser2Group(gID);
+      Routers.push('/group', context);
+    };
   }
 }
