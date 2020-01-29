@@ -28,7 +28,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 void main() async {
   // runApp(new GridPage());
   WidgetsFlutterBinding.ensureInitialized();
-  await (new QiniuUtil()).uploadImageTest();
+  // await (new QiniuUtil()).uploadImageTest();
   var token = await TokenUtil.getToken();
   var userName = await TokenUtil.getAccountName();
   var environment = await TokenUtil.getEnvironment();

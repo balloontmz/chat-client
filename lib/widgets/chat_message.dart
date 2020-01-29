@@ -3,13 +3,16 @@ import 'package:chat/utils/qiniu_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const String _name = "someone";
-
 class ChatMessage extends StatelessWidget {
   ChatMessage(
-      {this.text, this.animationController, this.left = true, this.action = 1});
+      {this.text,
+      this.animationController,
+      this.left = true,
+      this.action = 1,
+      this.name = "someone"});
   final String text;
   final int action;
+  final String name;
 
   ///变量存储动画控制器
   final AnimationController animationController;
@@ -43,7 +46,7 @@ class ChatMessage extends StatelessWidget {
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              new Text(_name, style: Theme.of(context).textTheme.subhead),
+              new Text(name, style: Theme.of(context).textTheme.subhead),
               _buildContent(context),
             ],
           ),
@@ -51,7 +54,7 @@ class ChatMessage extends StatelessWidget {
         new Container(
           margin: const EdgeInsets.only(left: 16.0),
           child: new CircleAvatar(
-            child: new Text(_name[0]),
+            child: new Text(name[0]),
             backgroundColor: Color(0xFF8c77ec),
           ),
         ),
@@ -65,13 +68,13 @@ class ChatMessage extends StatelessWidget {
       children: <Widget>[
         new Container(
           margin: const EdgeInsets.only(right: 16.0),
-          child: new CircleAvatar(child: new Text(_name[0])),
+          child: new CircleAvatar(child: new Text(name[0])),
         ),
         new Flexible(
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(_name, style: Theme.of(context).textTheme.subhead),
+              new Text(name, style: Theme.of(context).textTheme.subhead),
               _buildContent(context),
             ],
           ),

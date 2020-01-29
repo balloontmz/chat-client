@@ -27,3 +27,8 @@ ws token  可以通过 query 或者 header 传递,之前由于没找到 headers 
 2. 采用 event bus 的订阅流收集和分发服务端的消息,注意销毁页面时销毁监听者.订阅流代表可以注册全局的事件监听而不用担心时间被占用. 
 
 3. ws 消息处理是否应该考虑单独放在一个类里面进行调用???消息渲染暂时被注释,后面重新加
+
+## 
+[需要设置全局拦截器用于对于类似 dio 的异步请求进行拦截,重点是上下文的存储!!!](https://juejin.im/post/5c9f2c37518825609415d11d)
+
+[打包卡在 Running Gradle task 'assembleRelease'... 的问题](https://kaixuan.im/2019/09/26/flutterrunning-gradle-task-assemblerelease/)

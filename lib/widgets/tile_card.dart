@@ -25,8 +25,10 @@ class TileCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-            color: Colors.deepOrange,
-            child: CachedNetworkImage(imageUrl: '$img'),
+            color: Colors.grey[200],
+            child: CachedNetworkImage(
+              imageUrl: '$img',
+            ),
           ),
           Container(
             padding:

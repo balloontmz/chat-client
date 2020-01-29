@@ -15,16 +15,17 @@ typedef OnSuccess<T>(T data);
 typedef OnFail(String message);
 
 class Api {
-  static const String DEV_BASE_URL = 'http://localhost:1323/';
-  static const String BASE_URL = 'http://localhost:1323/';
-  static const String STORAGE_URL = 'http://localhost:1323/';
-  static const String DEV_STORAGE_URL = 'http://localhost:1323/';
+  static const String DEV_BASE_URL = 'http://47.100.124.234:1323/';
+  static const String BASE_URL = 'http://47.100.124.234:1323/';
+  static const String STORAGE_URL = 'http://47.100.124.234:1323/';
+  static const String DEV_STORAGE_URL = 'http://47.100.124.234:1323/';
 
   static const String LOGIN = 'user/login';
 
   static const String QINIU = 'upload';
 
   static const String CHAT_GROUP = 'group';
+  static const String FIND_LIST = 'group/find-list';
   static const String ADD_USER2CHAT_GROUP = 'group/add-user';
   static const String NOT_JOIN_CHAT_GROUP = 'group/not-join';
   static const String CHAT_MSG = 'msg';
@@ -93,6 +94,24 @@ class Api {
     }, onError: (id, msg) {});
 
     return resultList;
+  }
+
+  static Future<dynamic> getFindList(args) async {
+    var result;
+    await DioUtil.instance.requestNetwork(
+      Method.get,
+      Api.FIND_LIST,
+      queryParameters: args,
+      onSuccess: (response) {
+        result = response.data;
+      },
+      onError: (id, msg) {
+        Log.i("请求出错,错误原因为: $msg");
+      },
+    );
+    Log.i("返回的结果为: $result");
+
+    return result;
   }
 
   // 将用户添加进群组

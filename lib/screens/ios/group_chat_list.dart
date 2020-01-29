@@ -97,11 +97,8 @@ class _GroupChatListState extends State<GroupChatList> {
 
   Widget _buildGroupAvatar(String avatar) {
     if (avatar == null || avatar == "") {
-      return new Image.asset(
-        "images/avatar1.jpg",
-        width: 40.0,
-        height: 40.0,
-        fit: BoxFit.cover,
+      return new CircleAvatar(
+        child: new Text("None"),
       );
     }
     return new Image.network(

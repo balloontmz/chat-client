@@ -1,3 +1,4 @@
+import 'package:chat/api/api.dart';
 import 'package:chat/widgets/tile_card.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -36,17 +37,19 @@ class GridPageState extends State<GridPage> with AutomaticKeepAliveClientMixin {
           mainAxisSpacing: 4.0,
           crossAxisSpacing: 4.0,
           itemBuilder: (context, index) {
-            String img = '${posts[index]['goods_pic']}';
+            String img = posts[index]['word_cloud'] != ""
+                ? '${posts[index]['word_cloud']}'
+                : '${posts[index]['avatar']}';
             if (index == 0) {
               img = '';
             }
             return TileCard(
               img: img,
               // img: '${posts[index]['goods_pic']}',
-              title: '${posts[index]['goods_short_title']}',
-              author: '${posts[index]['goods_price']}',
-              authorUrl: '${posts[index]['goods_pic']}',
-              type: '${posts[index]['goods_pic']}',
+              title: '${posts[index]['name']}',
+              author: '${posts[index]['name']}',
+              authorUrl: '${posts[index]['avatar']}',
+              type: '${posts[index]['avatar']}',
               worksAspectRatio: posts[index]['dsr'],
             );
           },
@@ -72,16 +75,18 @@ class GridPageState extends State<GridPage> with AutomaticKeepAliveClientMixin {
   }
 
   void _getPostData(bool _beAdd) async {
-    var response = await dio.get(
-        'https://test-shop.tomtiddler.top/get-goods?page=$_page&size=$_size');
-    var result = response.data;
-    print('result: ${result['data']}');
+    // var url = Api.BASE_URL;
+    var result = await Api.getFindList({"page": _page, "size": _size});
+    // var response =
+    //     await dio.get('${url}group/find-list?page=$_page&size=$_size');
+    // var result = response.data;
+    print('result: ${result}');
     setState(() {
       if (!_beAdd) {
         posts.clear();
-        posts = result['data'];
+        posts = result;
       } else {
-        posts.addAll(result['data']);
+        posts.addAll(result);
       }
     });
   }

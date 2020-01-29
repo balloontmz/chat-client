@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:chat/api/api.dart';
 import 'package:chat/events/events.dart';
+import 'package:chat/routers/routers.dart';
 import 'package:chat/utils/dio_util.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/net_error_handle.dart';
