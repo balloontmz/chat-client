@@ -15,7 +15,7 @@ class GridPage extends StatefulWidget {
 class GridPageState extends State<GridPage> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
 
-  int _page = 0;
+  int _page = 1;
   int _size = 10;
   int _beLoad = 0; // 0表示不显示, 1表示正在请求, 2表示没有更多数据
 

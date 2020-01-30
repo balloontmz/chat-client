@@ -66,12 +66,10 @@ class TileCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(80)),
-                  child: Text(
-                    '${type == 'EXISE' ? '练习' : '其他'}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(25),
-                    ),
+                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(30)),
+                  child: IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.cloud_upload),
                   ),
                 )
               ],

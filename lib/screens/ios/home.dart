@@ -4,8 +4,10 @@ import 'package:chat/screens/ios/find.dart';
 import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/token_util.dart';
 import 'package:chat/widgets/fancy_tab_bar.dart';
+import 'package:chat/widgets/find_side_drawer.dart';
 import 'package:chat/widgets/group_float_btn.dart';
 import 'package:chat/widgets/group_side_drawer.dart';
+import 'package:chat/widgets/normal_app_bar.dart';
 import 'package:chat/widgets/normal_tab_bar.dart';
 import 'package:chat/widgets/user_center_app_bar.dart';
 import 'package:chat/widgets/user_center_content_list.dart';
@@ -19,6 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   int page = 0; // 默认在中间
 
   static const HOME = 0;
@@ -37,18 +41,34 @@ class _HomePage extends State<HomePage> {
         Log.i("进入此处聊天室列表");
         drawer = new GroupSideDrawer();
         child = new GroupChatList();
-        appBar = new AppBar(
-          backgroundColor: Color(0xFF8c77ec),
-          title: new Text("chat"),
+        appBar = new NormalAppbar(
+          title: "聊天列表",
+          leadingWidget: Builder(
+            builder: (context) => IconButton(
+              icon: new Icon(
+                Icons.subject,
+                color: Colors.white,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
         );
         floatBtn = new GroupFloatBtn();
         break;
       case FIND:
-        drawer = new Drawer();
+        drawer = new FindSideDrawer();
         child = new FindPage();
-        appBar = new AppBar(
-          backgroundColor: Color(0xFF8c77ec),
-          title: new Text("发现"),
+        appBar = new NormalAppbar(
+          title: "发现",
+          leadingWidget: Builder(
+            builder: (context) => IconButton(
+              icon: new Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
         );
         break;
       case CENTER:

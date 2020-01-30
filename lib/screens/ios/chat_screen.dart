@@ -134,7 +134,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     // });
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: Color(0xFF8c77ec),
+        backgroundColor: Color(0xff4357C8),
         title: new Text('chat'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
