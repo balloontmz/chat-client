@@ -97,6 +97,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           action: msg.type,
           left: false,
+          name: msg.userName,
         );
       } else {
         message = new ChatMessage(
@@ -106,6 +107,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             vsync: this,
           ),
           action: msg.type,
+          name: msg.userName,
         );
       }
 
@@ -139,6 +141,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: new Container(
+        color: Colors.grey[100],
         child: new Column(
           children: <Widget>[
             _loadingStream(),

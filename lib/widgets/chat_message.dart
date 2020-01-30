@@ -2,6 +2,7 @@ import 'package:chat/utils/log_util.dart';
 import 'package:chat/utils/qiniu_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatMessage extends StatelessWidget {
   ChatMessage(
@@ -54,7 +55,7 @@ class ChatMessage extends StatelessWidget {
         new Container(
           margin: const EdgeInsets.only(left: 16.0),
           child: new CircleAvatar(
-            child: new Text(name[0]),
+            child: new Text(name != '' ? name[0] : 'D'),
             backgroundColor: Color(0xFF8c77ec),
           ),
         ),
@@ -68,7 +69,7 @@ class ChatMessage extends StatelessWidget {
       children: <Widget>[
         new Container(
           margin: const EdgeInsets.only(right: 16.0),
-          child: new CircleAvatar(child: new Text(name[0])),
+          child: new CircleAvatar(child: new Text(name != '' ? name[0] : 'D')),
         ),
         new Flexible(
           child: new Column(
@@ -94,7 +95,14 @@ class ChatMessage extends StatelessWidget {
       );
     }
     return new Container(
+      // width: ScreenUtil.screenWidth * 0.6,
+      width: 250,
       margin: const EdgeInsets.only(top: 5.0),
+      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: new Text(text),
     );
   }

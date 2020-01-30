@@ -19,6 +19,7 @@ class Routers {
     '/login': (context) => SignIn(),
     '/register': (context) => SignUp(),
     '/home': (context, {arguments}) {
+      Log.i("进入聊天页面");
       return new ChatScreen(groupID: arguments['group_id']);
     },
     '/group': (context) => HomePage(),
@@ -77,7 +78,7 @@ class Routers {
   /// 方法跳转
   static push(String routeName, BuildContext context, [Map parmas]) {
     if (parmas != null) {
-      Log.i("路由存在参数进入此处");
+      Log.i("路由存在参数进入此处 $routeName");
       return Navigator.pushNamed(context, routeName, arguments: parmas);
     } else {
       return Navigator.pushNamed(

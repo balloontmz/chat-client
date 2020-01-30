@@ -24,7 +24,7 @@ class ThirdTrianglePainter extends CustomPainter {
     //起点
     _path.moveTo(0, -30);
     _path.lineTo(0, 1 * baseY);
-    _path.lineTo(0.8 * baseX, 1 * baseY);
+    _path.lineTo(0.99 * baseX, 1 * baseY);
     _path.lineTo(0.65 * baseX, -30);
     canvas.drawPath(_path, _paint);
   }

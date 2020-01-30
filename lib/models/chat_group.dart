@@ -50,7 +50,7 @@ class ChatGroup {
     Database db = await SqliteUtil.instance.database;
     List<Map> maps = await db.query(
       'chat_msg',
-      columns: ['id', 'user_id', 'group_id', 'msg', 'type'],
+      columns: ['id', 'user_id', 'group_id', 'msg', 'type', 'user_name'],
       where: 'group_id = ?',
       whereArgs: [this.id],
       orderBy: 'id desc',

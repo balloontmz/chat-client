@@ -23,7 +23,7 @@ class SecondTrianglePainter extends CustomPainter {
     final baseY = size.height * 1;
     //起点
     _path.moveTo(0.85 * baseX, -30);
-    _path.lineTo(0.4 * baseX, 1 * baseY);
+    _path.lineTo(0.47 * baseX, 1 * baseY);
     _path.lineTo(baseX, 1 * baseY);
     _path.lineTo(baseX, -30);
     canvas.drawPath(_path, _paint);

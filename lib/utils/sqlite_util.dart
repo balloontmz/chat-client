@@ -24,7 +24,7 @@ class SqliteUtil {
   static Future<Database> _getDatabase() async {
     return openDatabase(
       // Set the path to the database.
-      join(await getDatabasesPath(), 'chat3.db'),
+      join(await getDatabasesPath(), 'chat4.db'),
       // When the database is first created, create a table to store dogs.
       onCreate: (db, version) async {
         // Run the CREATE TABLE statement on the database.
@@ -42,7 +42,8 @@ class SqliteUtil {
             msg VARCHAR(255) NOT NULL,
             user_id INT NOT NULL,
             group_id INT NOT NULL,
-            type TINYINT NOT NULL DEFAULT 1)
+            type TINYINT NOT NULL DEFAULT 1,
+            user_name VARCHAR(255) NOT NULL DEFAULT '')
         """);
 
         Log.i("常见用户列表");

@@ -53,6 +53,8 @@ dependencies:
   image_picker: ^0.6.3+1
   image_crop: ^0.3.2
 
+  flutter_local_notifications: ^1.1.3
+
   # rxdart: ^0.23.1 # 此包的状态管理功能被 flutter 原生代替
 
 dev_dependencies:

@@ -13,6 +13,7 @@ class ChatMsg {
   int userID;
   int groupID;
   int type = 1;
+  String userName;
 
   ChatMsg({
     this.id,
@@ -20,6 +21,7 @@ class ChatMsg {
     this.userID,
     this.groupID,
     this.type = 1,
+    this.userName = '',
   });
 
   ///反序列化
@@ -30,6 +32,7 @@ class ChatMsg {
       groupID: json['group_id'],
       msg: json['msg'],
       type: json['type'] != null ? json['type'] : 1,
+      userName: json['user_name'] != null ? json['user_name'] : '',
     );
   }
 
@@ -47,6 +50,7 @@ class ChatMsg {
         'group_id': groupID,
         'msg': msg,
         'type': type,
+        'user_name': userName,
       };
 
   Map<String, dynamic> toMap() {
@@ -56,6 +60,7 @@ class ChatMsg {
       'group_id': groupID,
       'msg': msg,
       'type': type,
+      'user_name': userName,
     };
     return map;
   }
@@ -67,6 +72,7 @@ class ChatMsg {
     groupID = map['group_id'];
     msg = map['msg'];
     type = map['type'] != null ? map['type'] : 1;
+    userName = map['user_name'] != null ? map['user_name'] : '';
   }
 
   ///数据库操作
@@ -108,7 +114,7 @@ class ChatMsg {
     Database db = await SqliteUtil.instance.database;
     List<Map> maps = await db.query(
       'chat_msg',
-      columns: ['id', 'user_id', 'group_id', 'msg', 'type'],
+      columns: ['id', 'user_id', 'group_id', 'msg', 'type', 'user_name'],
     );
     if (maps.length > 0) {
       return maps.map((dynamic model) => ChatMsg.fromMap(model)).toList();
